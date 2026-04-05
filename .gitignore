@@ -1,0 +1,31 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Generic build outputs
+build/
+dist/
+out/
+
+# Embedded outputs
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+
+# Logs
+*.log
+
+# Altium generated folders/files
+History/
+__Previews/
+Project Logs for *
