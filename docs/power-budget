@@ -41,7 +41,7 @@ This value is a planning assumption, not a final measured operating point.
 ### Current for one lit LED
 When one LED is on during its active layer time:
 
-$I_LED = 10 mA$
+$$I_LED = 10 mA$$
 
 ### Worst-case current for one active layer
 If all 64 LEDs in the selected layer are on at the same time:
