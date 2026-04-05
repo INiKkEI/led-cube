@@ -15,6 +15,7 @@
   - hardware test patterns
   - preloaded animations
   - serial debugging
+  - one physical button input for switching between preloaded animations
 - GitHub documentation of design decisions and progress
 
 ### Excluded from version 1
