@@ -58,11 +58,6 @@ This is the key current value for:
 - 5 V power distribution
 - connector and trace planning
 
-### Average current for one LED
-With 1:8 multiplexing, the average current of one LED that is logically always on is:
-
-`I_LED_avg = 10 mA / 8 = 1.25 mA`
-
 ### Average total LED current for a fully filled cube
 If the displayed pattern turns on every voxel, each layer still conducts one at a time. Over time, the average total LED supply current is approximately equal to the current of one fully lit active layer:
 
@@ -161,8 +156,6 @@ That means the column-driving architecture must be chosen with enough voltage an
 - blue LED forward voltage
 - current-limiting resistor drop
 - driver/output-stage voltage drop
-
-Because blue LEDs have a higher forward voltage than red LEDs, resistor and driver selection will be more sensitive to voltage headroom.
 
 ## Power dissipation notes
 
