@@ -186,7 +186,6 @@ The ESP32 board or carrier handles its own 5 V to 3.3 V conversion. That means s
 | LEDs per layer | 64 |
 | Multiplex ratio | 1:8 |
 | Instantaneous current per lit LED | 10 mA |
-| Average current per LED at 1:8 duty | 1.25 mA |
 | Worst-case active-layer current | 640 mA |
 | Estimated ESP32 budget from 5 V | 150 mA |
 | Estimated driver/support logic budget | 50 mA |
