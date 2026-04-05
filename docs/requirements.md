@@ -1,73 +1,22 @@
-# Included
+# Requirements
 
-- 8×8×8 monochrome LED cube
-- One controller PCB in the base
-- ESP32 as the main controller
-- LED driving electronics for all 512 LEDs
-- Multiplexed scanning with one active layer at a time
-- 5 V USB-C power input
-- Firmware for:
-  - cube refresh
-  - hardware test patterns
-  - preloaded animations
-  - serial debugging
-- GitHub documentation of design decisions and progress
+## Functional requirements
 
-# Excluded from version 1
+- The system shall control an 8×8×8 monochrome LED cube.
+- The system shall address 512 LEDs using multiplexed scanning.
+- The system shall use one controller PCB in the base.
+- The system shall use an ESP32 as the main controller.
+- The firmware shall display preloaded animations.
+- The firmware shall provide serial debug output.
 
-- RGB LEDs
-- wireless app control
-- audio-reactive features
-- battery operation
-- distributed multi-board architecture
-- advanced PC visualization software
-- enclosure optimization beyond basic mechanical support
+## Electrical requirements
 
-# High-level architecture
+- The system shall accept 5 V power input through USB-C.
+- The LED driving circuit shall provide adequate current control for stable brightness.
+- The PCB shall include programming and debugging access for the ESP32.
 
-- 512 monochrome LEDs arranged in 8 layers of 8×8
-- One active layer is scanned at a time
-- Column lines are controlled through driver circuitry
-- Layers are switched using transistors or MOSFETs
-- An ESP32 manages refresh timing, animation data, and the serial debug interface
-- The whole system is powered from a regulated 5 V USB-C input
+## Documentation requirements
 
-# Main technical decisions
-
-## Cube size
-8×8×8
-
-## LED type
-Monochrome
-
-## Controller PCB
-One controller PCB for the first version, placed in the base.
-
-## Main control method
-ESP32 microcontroller on the main PCB.
-
-## LED driving method
-Multiplexed layer scanning. One layer is enabled at a time while column states define which LEDs in that layer are lit.
-
-## Power input method
-5 V input through USB-C.
-
-## Firmware
-Included in version 1.
-
-Firmware will provide:
-- refresh timing and multiplexing control
-- LED addressing logic
-- startup and hardware test patterns
-- several preloaded animations
-- serial debug output for bring-up and testing
-
-## Success criteria for version 1
-
-Version 1 is successful if it can:
-- light all 512 LEDs reliably
-- display stable animations without obvious flicker
-- operate safely from a 5 V USB-C supply
-- run preloaded animation sequences from firmware
-- provide useful serial debug output during testing
-- be understandable and reproducible from the repository documentation
+- The repository shall contain project scope documentation.
+- The repository shall contain hardware and firmware folders from the beginning.
+- Major design decisions shall be recorded during development.
