@@ -4,7 +4,7 @@
 
 ### Included
 
-- 8×8×8 monochrome LED cube
+- 8×8×8 monochrome blue LED cube
 - One controller PCB in the base
 - ESP32 as the main controller
 - LED driving electronics for all 512 LEDs
