@@ -135,6 +135,8 @@ The 5 V path therefore needs:
 - local decoupling near active circuitry
 - low-impedance return paths
 
+The 5 V input stage is intentionally simple in Version 1. It does not include extra protection parts such as fuses, resettable fuses, or TVS devices. Power conditioning is limited to bulk capacitance and local decoupling.
+
 ## Layer-switching implications
 The cube uses low-side MOSFET layer switching. Each layer switch must handle the full active-layer current.
 
