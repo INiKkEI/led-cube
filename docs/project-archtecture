@@ -4,7 +4,7 @@
 This document freezes the main electrical architecture of Version 1 before schematic capture begins. It defines how the 8×8×8 monochrome LED cube will be powered, controlled, and multiplexed, so later schematic and PCB work can follow a fixed plan.
 
 ## Version 1 summary
-Version 1 is an 8×8×8 monochrome LED cube driven by an ESP32. The cube uses multiplexed scanning with one active layer at a time. Power enters through USB-C at 5 V. The controller PCB contains the USB-C 5 V input stage, 5 V power distribution, LED-driving logic, layer-switching circuitry, and the ESP32 interface. Firmware is included and will provide preloaded animations, serial debug, and a button-based animation switch function.
+Version 1 is an 8×8×8 monochrome blue LED cube driven by an ESP32. The cube uses multiplexed scanning with one active layer at a time. Power enters through USB-C at 5 V. The controller PCB contains the USB-C 5 V input stage, 5 V power distribution, LED-driving logic, layer-switching circuitry, and the ESP32 interface. Firmware is included and will provide preloaded animations, serial debug, and a button-based animation switch function.
 
 ## Frozen architecture decisions
 
