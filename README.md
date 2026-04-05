@@ -27,7 +27,3 @@ LED Cube is an 8×8×8 monochrome LED cube project designed as a documented elec
 - `simulations/` — circuit or timing simulations
 - `manufacturing/` — BOM, Gerbers, and assembly outputs
 - `notes/` — engineering log and progress notes
-
-## Current phase
-
-Phase 1 — Define scope
