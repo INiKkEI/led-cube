@@ -147,8 +147,8 @@ The system signal flow is:
 
 The power flow is:
 
-`USB-C 5 V input -> protection/filtering -> 5 V rail -> LED drive section`  
-`USB-C 5 V input -> protection/filtering -> ESP32 5 V input -> onboard 3.3 V conversion`
+`USB-C 5 V input -> bulk capacitance and decoupling -> 5 V rail -> LED drive section`  
+`USB-C 5 V input -> bulk capacitance and decoupling -> ESP32 5 V input -> onboard 3.3 V conversion`
 
 ## Power architecture
 
@@ -161,10 +161,11 @@ The 5 V rail is the main input rail. It powers:
 ### 3.3 V generation
 The ESP32 receives 3.3 V from its own onboard 5 V to 3.3 V regulator or converter. Because of this, the controller PCB does not currently require a separate dedicated 3.3 V regulator stage for the ESP32.
 
-### Protection and conditioning
-The exact schematic implementation is still part of later work, but the architecture assumes:
+### Power conditioning
+The 5 V input stage is intentionally simple and does not include extra protection parts such as fuses or TVS devices in Version 1. Power conditioning is limited to bulk capacitance and local decoupling.
+
+The architecture assumes:
 - USB-C used as a 5 V input connector
-- basic input protection and filtering
 - bulk capacitance near the power entry
 - local decoupling near controller and driver sections
 
