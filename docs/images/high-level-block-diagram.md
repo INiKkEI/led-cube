@@ -3,7 +3,7 @@
 ```mermaid
 flowchart LR
     PSU[USB-C 5 V Input]
-    PROT[Protection / Filtering<br/>bulk capacitance, input protection, decoupling]
+    PROT[Protection / Filtering<br/>bulk capacitance, decoupling]
     ESP[ESP32<br/>refresh timing, animation engine,<br/>serial debug, button handling]
     BTN[User Button<br/>animation select]
     DRV[Serial Driver Chain<br/>data, clock, latch, OE<br/>64 column outputs + 8 layer-control bits]
