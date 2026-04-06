@@ -1,272 +1,415 @@
-# Major Components
+# Component Selection
 
 ## Purpose
-This document lists the main hardware building blocks for Version 1 of the LED cube controller and records the intended role of each part group. It is not yet a final BOM. Its purpose is to make sure that every critical function in the architecture has a defined component class before schematic capture begins.
 
-## System summary
-Version 1 is an 8×8×8 blue monochrome LED cube controlled by an ESP32. The cube uses multiplexed scanning with one active layer at a time. Column data and layer selection are both generated through a serial driver chain. Layers are switched on the low side with MOSFETs. Power enters through USB-C at 5 V. The ESP32 is powered from 5 V through the regulator already present on the selected ESP32 board or carrier.
+This document selects the main components for the first schematic version of the 8×8×8 monochrome LED cube controller PCB.
 
-## Selection philosophy
-Version 1 prioritizes:
-- simplicity
-- low bring-up risk
-- easy documentation
-- easy hand assembly where possible
-- practical sourcing
-- suitable current capability for a student-built project
+The goals for this revision are:
 
-This document freezes the required component categories and their design roles, even if the exact part numbers are still to be chosen.
+- keep the design simple enough for a first custom PCB
+- keep the design understandable and easy to debug
+- accept limited brightness and current margin in exchange for simplicity
 
-## Major component groups
+This revision intentionally uses a shift-register-based drive approach instead of dedicated LED driver ICs.
 
-### 1. Main controller
-A practical ESP32 board or module is used as the main controller.
+---
 
-#### Required role
-- run refresh timing
-- generate driver-chain control signals
-- store and play preloaded animations
-- read the animation-select button
-- provide serial debug
+## Selected architecture
 
-#### Required characteristics
-- enough usable GPIO for the driver chain, UART, and button input
-- reliable 5 V input or well-defined power interface
-- practical availability for assembly and debugging
-- suitable documentation and community support
+### Final choice
 
-#### Reason for selection
-The ESP32 gives more than enough processing capability for a monochrome multiplexed LED cube while keeping the firmware side interesting but manageable. Using a board or module with a known power path reduces risk compared with designing around a bare chip immediately.
+- Main controller board: **ESP32-DevKitC-32E**
+- LED line control: **9 × 74HCT595**
+- Layer switching: **8 × BD241C**
+- USB-C power input on the controller PCB
+- Programming/debug through the ESP32-DevKitC-32E board itself
 
-## 2. Serial driver chain
-A serially controlled output driver chain is used to generate:
-- 64 column control outputs
-- control outputs for the layer-switching MOSFET gates
+### Functional split
 
-#### Required role
-- expand the ESP32 control interface into many outputs
-- allow display data to be shifted in serially
-- update outputs in a controlled and repeatable way
-- reduce direct GPIO usage on the ESP32
+- **8 × 74HCT595** are used for the **64 LED control lines**
+- **1 × 74HCT595** is used for the **8 layer-control outputs**
+- **8 × BD241C** are used as the **layer switching transistors**
+- the display is scanned by **multiplexing one layer at a time**
 
-#### Required characteristics
-- serial input with clocked shifting
-- latched or otherwise stable outputs
-- practical voltage compatibility with the control scheme
-- output structure suitable for the chosen column-driving approach
-- enough total outputs when chained together
+### Why this architecture was selected
 
-#### Reason for selection
-Direct GPIO control of the full cube is not practical. A serial driver chain makes the system feasible, keeps routing cleaner, and matches the planned firmware architecture.
+- 74HCT595 is cheap, common, and easy to understand
+- HCT is preferred over HC because the controller uses 3.3 V logic while the register chain runs from 5 V
+- BD241C is available and easy to hand-solder
+- ESP32-DevKitC-32E already includes the ESP32 module, USB interface, and onboard power regulation
+- this is a practical student-project choice even if it is not the most optimized electrical solution
 
-## 3. Layer-switching devices
-Low-side MOSFETs are used for the 8 layer switches.
+---
 
-#### Required role
-- connect one active layer cathode plane to ground
-- sink the full current of one active layer
-- switch cleanly during multiplex scanning
+## Main controller choice
 
-#### Required characteristics
-- logic-compatible gate drive from the selected control scheme
-- current capability above worst-case active-layer current
-- low enough conduction loss to avoid unnecessary heating
-- practical footprint and availability
+### Selected part
 
-#### Reason for selection
-Low-side MOSFET switching matches the chosen common-cathode layer structure and is simpler than a comparable high-side approach for Version 1.
+- **ESP32-DevKitC-32E**
 
-## 4. Current-limiting resistors
-Current limiting is placed in the column paths.
+### Why this part
 
-#### Required role
-- define the LED current during the active layer interval
-- prevent overcurrent in the LEDs and drive path
-- make brightness behavior more predictable
+- includes an ESP32 development board based on the ESP32 family
+- includes Bluetooth and BLE support
+- includes onboard USB interface and support circuitry
+- includes onboard regulation for the ESP32 section
+- reduces schematic risk compared with placing a bare ESP32 or module plus support parts on the first PCB
 
-#### Required characteristics
-- resistor value selected from the final LED and driver voltage conditions
-- suitable power rating
-- practical package for assembly and board area
+### Important consequence
 
-#### Reason for selection
-Column-path current limiting is a straightforward fit for the chosen multiplexed architecture and keeps current definition associated with the driven LED paths.
+The custom controller PCB does **not** need a separate 3.3 V regulator just to power the ESP32 board.
 
-## 5. USB-C power input connector
-A USB-C connector is used only as the 5 V power entry point.
+The custom PCB still needs a **5 V rail**, and that 5 V rail is supplied to the DevKit board input. The DevKit then generates the ESP32-side 3.3 V rail internally. :contentReference[oaicite:0]{index=0}
 
-#### Required role
-- bring 5 V power onto the controller PCB
-- provide a modern, common connector for bench supplies or adapters
+---
 
-#### Required characteristics
-- suitable for the intended assembly method
-- mechanically reasonable for repeated use
-- compatible with a simple 5 V sink implementation
+## Power architecture
 
-#### Reason for selection
-USB-C makes the project easier to power with common cables and supplies while keeping the input connector modern and convenient.
+### Main supply
 
-## 6. USB-C support components
-Supporting parts are required so the board behaves correctly as a 5 V-powered USB-C sink.
+The system uses a **5 V main rail** from USB-C.
 
-#### Required role
-- define the board as a power sink where needed
-- support correct 5 V availability at the connector
+That 5 V rail is used for:
 
-#### Required characteristics
-- compatible with a 5 V sink-only design
-- simple to implement
-- appropriate for the intended current level
+- the **74HCT595** chain
+- the LED cube side
+- the **5 V input** to the ESP32-DevKitC-32E board
 
-#### Reason for selection
-The connector alone is not the whole input design. Supporting components are needed so the 5 V input stage behaves correctly and predictably.
+---
 
-## 7. Bulk capacitance
-Bulk capacitance is required on the 5 V rail near the input and possibly near the display-driving section.
+## Logic-level compatibility
 
-#### Required role
-- support transient current demand
-- reduce rail sag during switching events
-- improve supply stability during multiplex operation
+The ESP32 GPIOs are **3.3 V logic**.
 
-#### Reason for selection
-The display load is dynamic. The board will not include extra protection parts such as fuses or TVS devices in Version 1, so bulk capacitance becomes the main intentional power-conditioning element on the 5 V rail.
+The shift-register chain is powered from **5 V**.
 
-## 8. Decoupling capacitors
-Local decoupling is required near active devices.
+A plain **74HC595** is not the preferred part in this situation, because with 5 V supply its input-high requirement is not as clean a match for a 3.3 V MCU output.
 
-#### Required role
-- support stable local supply voltage
-- reduce switching noise
-- improve behavior of the ESP32 interface and driver chain
+A **74HCT595** is the correct choice here because it is intended to accept TTL-level logic inputs while running from 5 V. TI lists the SN74HCT595 as a 4.5 V to 5.5 V device with **TTL-compatible CMOS inputs**, **VIH(min) = 2 V**, and **VIL(max) = 0.8 V**, which makes it directly compatible with 3.3 V ESP32 GPIO.
 
-#### Required locations
-- near driver ICs
-- near the ESP32 power interface
-- near other active components as required
+### Decision
 
-#### Reason for selection
-The design contains pulsed LED current and digital switching. Decoupling is essential for stable operation.
+Use **74HCT595**, not 74HC595, for all 9 shift registers.
 
-## 9. User input button
-One physical button is included for animation switching.
+---
 
-#### Required role
-- allow the user to step through preloaded animations
-- provide a simple standalone interface without external control hardware
+## 74HCT595 current limits used in this design
 
-#### Required characteristics
-- simple momentary action
-- practical footprint and placement
-- compatible with ESP32 GPIO input handling
+This design uses the **recommended output-current limit**, not the absolute-maximum stress limit.
 
-#### Reason for selection
-A single button adds useful local control without adding much complexity.
+TI lists the SN74HCT595 with:
 
-## 10. Pull resistors and support passives
-A number of small passive parts will be required around the design.
+- **IOL(max) = 6 mA**
+- **IOH(max) = -6 mA**
+- **input current II ≤ 1 µA**
+- **supply voltage 4.5 V to 5.5 V**
 
-#### Likely roles
-- button pull-up or pull-down
-- MOSFET gate biasing or gate resistors if needed
-- logic defaults where required
-- other small support functions in the control paths
+### Interpretation for this project
 
-#### Reason for selection
-These parts are necessary to make the schematic electrically complete and predictable.
+For this cube, each 74HCT595 output is treated as a **6 mA maximum practical output**.
 
-## 11. Programming and debug interface
-The controller needs a practical way to flash firmware and access serial debug.
+That is the current basis used for all first-pass calculations below.
 
-#### Required role
-- upload firmware
-- observe serial output during bring-up
-- support debugging during development
+This document does **not** size the LED resistors at a higher current such as 10 mA or 20 mA, because that would not match the chosen driver architecture.
 
-#### Possible implementation forms
-- direct access through the selected ESP32 board or carrier
-- header or connector for serial access
-- onboard USB-UART path, if the final controller arrangement requires it
+---
 
-#### Reason for selection
-Bring-up and iteration are much easier if programming and debug access are planned from the start.
+## Display-drive method
 
-## Component groups by system function
+The cube is driven by **layer multiplexing**.
 
-### Control section
-- ESP32 board or module
-- programming/debug interface
-- button input
-- pull resistors and logic support passives
+At any given moment:
 
-### Display-drive section
-- serial driver chain
-- current-limiting resistors
-- layer-switch MOSFETs
-- related gate or control passives
+- only **one layer** is active
+- the 64 LED control lines define which LEDs in that layer are on
+- the active layer is changed rapidly to create a full 3D image
 
-### Power-input section
-- USB-C connector
-- USB-C support components
-- bulk capacitance
-- local decoupling
+### Consequence
 
-## Selection constraints to remember
+Each LED is only on for about **1/8 of the time**, so average brightness is lower than with static drive.
 
-### Blue LED voltage headroom
-Because the cube uses blue LEDs, the column-driving path must leave enough voltage for:
-- LED forward voltage
-- current-limiting resistor drop
-- any driver/output-stage voltage loss
+This limitation is accepted in Version 1.
 
-This means the driver chain cannot be chosen based only on output count.
+---
 
-### Active-layer current
-The layer-switching devices and 5 V distribution must be chosen around the worst-case active-layer current, not just average logic-level current.
+## LED current target
 
-### Minimal input-power philosophy
-Version 1 intentionally avoids extra protection parts such as fuses, resettable fuses, or surge suppressors. The power-input section is therefore kept simple:
-- USB-C power entry
-- required USB-C sink configuration parts
-- bulk capacitance
-- local decoupling
+Since the selected 74HCT595 output current limit is **6 mA maximum per output**, the first revision should be designed around that value.
 
-### Assembly practicality
-Version 1 should avoid unnecessarily difficult parts where a simpler alternative gives similar educational value and performance.
+### Design current
 
-## What is frozen in Phase 2
-This document freezes the required component categories for:
-- control
-- serial output expansion
-- low-side layer switching
-- column current limiting
-- 5 V USB-C input
-- bulk power conditioning
-- local user input
-- programming/debug access
+- **target peak LED current: 6 mA maximum per LED line**
 
-## What is not yet frozen
-This document does not yet freeze:
-- exact manufacturer part numbers
-- exact footprints
-- exact resistor values
-- exact MOSFET type
-- exact driver IC type
-- exact capacitor values
-- exact connector model
-- exact ESP32 board or module choice
+This is the highest current that will be used in the first-pass calculations.
 
-Those are part-selection and schematic-stage tasks.
+In practice, actual LED current may be lower because the 74HCT595 output itself has voltage drop under load.
 
-## Phase 2 conclusion
-Every major function in Version 1 now has a defined component class:
-- ESP32 for control
-- serial driver chain for output expansion
-- low-side MOSFETs for layer switching
-- resistors for column current limiting
-- USB-C for 5 V input
-- bulk and local capacitors for power stability
-- support components for user interaction and debug access
+---
 
-This is enough to proceed into exact part selection and schematic capture without leaving any critical function undefined.
+## LED resistor calculation for 6 mA
+
+### Assumptions
+
+Use a first-pass estimate with:
+
+- supply voltage: **5.0 V**
+- blue LED forward voltage: about **3.0 V**
+- transistor/switch path drop: about **0.2 V**
+- target LED current: **6 mA**
+
+### Formula
+
+`R = (VCC - VF_LED - Vswitch) / I_LED`
+
+### Calculation
+
+`R = (5.0 - 3.0 - 0.2) / 0.006`
+
+`R = 1.8 / 0.006 = 300 Ω`
+
+### Nearest standard values
+
+- **300 Ω**
+- **330 Ω**
+
+Because the real 74HCT595 output also drops voltage under load, the actual current with a 300 Ω or 330 Ω resistor will be somewhat less than the ideal calculation suggests.
+
+### Final tentative resistor choice
+
+For the first schematic version, choose:
+
+- **330 Ω per LED line**
+
+---
+
+## Worst-case layer current estimate
+
+Each layer contains **64 LEDs**.
+
+If all 64 LEDs in the active layer are turned on at the same time, the layer transistor carries the sum of those LED currents.
+
+### Using 6 mA per LED
+
+`I_layer_max = 64 × 6 mA = 384 mA`
+
+### Design implication
+
+The layer-switching device must comfortably handle about **0.384 A** of pulsed current in the worst case.
+
+That is why the design uses discrete layer transistors instead of trying to switch layers directly from logic outputs.
+
+---
+
+## Total current demand on one 74HCT595
+
+Each 74HCT595 has **8 outputs**.
+
+If all 8 outputs of one chip are on at the same time and each output is at the 6 mA design limit:
+
+`I_chip_outputs = 8 × 6 mA = 48 mA`
+
+This is one reason the design is still plausible with 74HCT595:
+
+- **48 mA per chip** is below the usual **70 mA total through VCC or GND** family limit often associated with this class of part
+- but it is still close enough that the design should remain conservative and should not be pushed to higher LED current without redesign
+
+So the first revision keeps the LED current target at **6 mA max per output**, not above it.
+
+---
+
+## Layer transistor choice
+
+### Selected part
+
+- **BD241C**
+
+### Why it was selected
+
+- easy to solder because it is a through-hole TO-220 device
+- strong enough for the estimated layer current
+- easy to document and easy to replace later if needed
+
+### Drawbacks
+
+- physically large
+- not compact
+- requires base current because it is a BJT
+- not the most elegant PCB solution, but acceptable for a first prototype
+
+---
+
+## Layer-control method
+
+One dedicated **74HCT595** is used for the 8 layer-control signals.
+
+Each of its outputs drives one **BD241C base** through a resistor.
+
+This is acceptable for a first prototype, but it is not a high-margin drive scheme.
+
+### Why it is still accepted
+
+- the design target is simplicity
+- expected layer current is below 0.4 A worst case using the 6 mA LED-current limit
+- the project accepts reduced margin in exchange for a simpler architecture
+
+### Required support parts per BD241C
+
+Each transistor should include:
+
+- **one base resistor**
+- **one base-emitter pull-down resistor**
+
+Tentative values:
+
+- base resistor: **1 kΩ**
+- base-emitter pull-down: **10 kΩ**
+
+---
+
+## Base-drive estimate for BD241C
+
+This is only a first-pass plausibility check.
+
+### Assumptions
+
+- 74HCT595 output high is near **5 V**
+- transistor base-emitter voltage is about **0.7 V**
+- base resistor is **1 kΩ**
+
+### Calculation
+
+`I_B ≈ (5.0 - 0.7) / 1000`
+
+`I_B ≈ 4.3 mA`
+
+This is a reasonable first estimate for a directly driven prototype layer transistor stage.
+
+It is not a full optimized saturation analysis. It is only enough to justify that the first revision is electrically plausible.
+
+### Final tentative values
+
+- **RB = 1 kΩ**
+- **RBE = 10 kΩ**
+
+---
+
+## USB-C power input choice
+
+### Selected part
+
+- **USB4085-GF-A**
+
+### Why this part
+
+- suitable for a simple USB-C 5 V sink-only input
+- easy to justify and easy to source
+- mechanically stronger than weaker connector choices
+- practical for a student PCB
+
+### Implementation notes
+
+This board only needs **5 V USB-C sink operation**, not USB Power Delivery.
+
+The power-input section should therefore include:
+
+- VBUS to 5 V rail
+- GND to board ground
+- **5.1 kΩ pulldown resistor on CC1**
+- **5.1 kΩ pulldown resistor on CC2**
+
+---
+
+## Shift-register choice
+
+### Selected part
+
+- **74HCT595**
+
+### Quantity
+
+- **9 total**
+
+### Use
+
+- **8 devices** for the 64 LED control outputs
+- **1 device** for the 8 layer-control outputs
+
+### Why this part
+
+- easy to source
+- easy to understand
+- easy to route in a chain
+- compatible with 3.3 V ESP32 logic when powered from 5 V
+- TI’s published practical output-current rating of **6 mA per output** gives a clear current basis for the first design calculations
+### Limitation
+
+This is not a dedicated LED-driver solution, so brightness headroom is limited.
+
+That limitation is accepted in Version 1.
+
+---
+
+## Programming and debug
+
+The **ESP32-DevKitC-32E** already provides the practical controller-board interface for programming and serial debug.
+
+### Decision
+
+Do not add a separate USB-UART bridge to the custom PCB in Version 1.
+
+Only expose the necessary power and signal connections between the custom PCB and the ESP32-DevKitC-32E.
+
+---
+
+## Tentative part list
+
+### Main active components
+
+- **U1** — ESP32-DevKitC-32E
+- **U2 to U10** — 74HCT595
+- **Q1 to Q8** — BD241C
+- **J1** — USB4085-GF-A
+
+### Required support components
+
+- **64 × LED current-limiting resistors**  
+  tentative value: **330 Ω**
+- **8 × BD241C base resistors**  
+  tentative value: **1 kΩ**
+- **8 × BD241C base-emitter pull-down resistors**  
+  tentative value: **10 kΩ**
+- **2 × USB-C CC resistors**  
+  value: **5.1 kΩ**
+- local decoupling capacitors for all logic ICs
+- bulk capacitance on the 5 V rail near the LED-driving section
+- headers or connectors to mount/interface the ESP32-DevKitC-32E board
+
+---
+
+## Design limitations accepted in Version 1
+
+This component choice is intentional, but it has known limits:
+
+- brightness headroom is limited because 74HCT595 is not a dedicated LED-driver IC
+- the 6 mA-per-output design limit directly constrains LED brightness
+- BD241C is bulky and not ideal for compact layout
+- direct register-to-BJT base drive is workable but not highly optimized
+- using a dev board instead of a module makes the controller section larger and less integrated
+
+These compromises are accepted because the main goal is a working, well-documented first controller PCB.
+
+---
+
+## Final decision
+
+Version 1 will use:
+
+- **ESP32-DevKitC-32E** as the controller board
+- **9 × 74HCT595** as the shift-register chain
+- **8 × BD241C** as the layer transistors
+- **USB4085-GF-A** as the USB-C power connector
+- **330 Ω** as the tentative LED resistor value
+- **1 kΩ / 10 kΩ** as the tentative BD241C base-drive resistor values
+- **6 mA maximum per 74HCT595 output** as the current basis for the design calculations
+
+This is the selected component set for the first schematic revision.
