@@ -46,7 +46,7 @@ Version 1 is considered successful if it can:
 
 ---
 
-## Phase 3 — System architecture and early feasibility
+## Phase 3 — System architecture and schematic capture
 
 ### Completed
 - High-level architecture documented
@@ -55,18 +55,44 @@ Version 1 is considered successful if it can:
 - Preliminary component planning documented
 - Pin budget documented
 - Power budget documented
+- Altium project structure added to the repository
+- Initial schematic document created
+- LED driver section drawn
+- ESP32 core/support circuitry completed
+- ERC run on the schematic
+- Real ERC errors fixed
+- Remaining warnings reviewed and understood
+- Schematic considered ready for layout handoff
 
 ### Result
-The basic electrical architecture is now defined well enough to move into detailed schematic design.
+The project has moved beyond architecture planning and into completed schematic capture for Version 1. The schematic is now in a state suitable for PCB layout preparation.
 
 ### Notes
-Current architecture:
-- 512 monochrome LEDs arranged as 8 layers of 8×8
-- one active layer scanned at a time
-- column lines driven by dedicated driver circuitry
-- layers switched by transistors or MOSFETs
-- ESP32 handles refresh timing, animation data, and serial debug
-- powered from regulated 5 V USB-C input
+Current hardware implementation state:
+- Altium project files are present under `hardware/altium/led-cube/`
+- the main schematic currently exists as `Sheet1.SchDoc`
+- schematic capture is functionally complete enough to hand off into PCB layout work
+- future schematic edits may still happen, but layout can now begin
+
+---
+
+## Phase 4 — PCB layout preparation
+
+### Completed
+- PCB stackup defined
+- Basic board constraints defined
+- Layout preparation started
+
+### In progress
+- PCB document and board outline refinement
+- Placement planning
+- Mechanical fit of cube connection grid and controller board zones
+
+### Result
+The project has entered PCB layout preparation. Electrical design is far enough along that placement and board planning can proceed.
+
+### Notes
+The main remaining work is no longer schematic capture. It is PCB definition, placement, routing, and later bring-up preparation.
 
 ---
 
@@ -81,30 +107,30 @@ Current architecture:
 - `docs/project-archtecture.md`
 - `notes/build-log.md`
 
----
-
-## Next phase
-
-### Phase 4 — Detailed schematic design
-Planned work:
-- choose exact LED driver ICs / shift registers
-- choose exact layer switching devices
-- define current-limiting strategy
-- define ESP32 support circuitry
-- define USB-C power input circuitry
-- draw first full schematic
-- review schematic against pin and power budgets
+### Present hardware files
+- `hardware/altium/led-cube/Sheet1.SchDoc`
+- `hardware/altium/led-cube/led-cube.PrjPcb`
+- `hardware/altium/led-cube/led-cube.PrjPcbStructure`
 
 ---
 
-## Open questions
+## Next work focus
+
+### Immediate priorities
+- create or refine the PCB board outline
+- place major components by functional zones
+- reserve and align the 8×8 cube connection grid area
+- define power routing strategy on the PCB
+- begin PCB routing and layout review
+
+### Open questions
 - Final LED current per LED
 - Peak current per active layer
-- Exact driver IC selection
-- Exact transistor or MOSFET selection for layers
-- Whether brightness control will be global only or per-voxel through PWM timing
+- Exact layer transistor or MOSFET choice
+- Brightness-control strategy in final firmware
+- Final board dimensions and cube connector/grid arrangement
 
 ---
 
 ## Revision note
-This log should be updated whenever a phase is completed, a major design decision changes, or a document is added that affects architecture, power, firmware scope, or manufacturability.
+This log should be updated whenever schematic status changes, PCB layout meaningfully progresses, or a major electrical or mechanical decision changes.
