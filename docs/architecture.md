@@ -6,8 +6,7 @@ How the cube is put together, and what crosses each boundary. The numbers it has
 
 ```mermaid
 flowchart TB
-    JACK["Barrel jack<br/>5 V DC"] -->|IF-1| PROT["1 A resettable fuse<br/>+ reverse-parallel diode"]
-    PROT --> RAIL(["5 V rail"])
+    JACK["Barrel jack<br/>5 V DC"] -->|IF-1| RAIL(["5 V rail"])
 
     BTN["Push button"] -->|IF-6| ESP["ESP32 DevKit<br/>controller"]
 
@@ -45,9 +44,7 @@ Columns are the anode side: a shift register output goes high and sources curren
 | V+ | in | 5.0 V ±5 % | Barrel jack centre pin, 5.5 / 2.1 mm |
 | GND | — | 0 V | Barrel jack sleeve |
 
-Draws up to 700 mA. A 1 A resettable fuse sits in the positive path, and a 3 A diode is fitted across the input behind it — cathode to +5 V, anode to ground.
-
-In normal polarity the diode is reverse-biased and does nothing. Connect the supply backwards and it conducts, shorting the input so the fuse trips; the rest of the board never sees more than about −0.7 V. Unplugging it lets the fuse reset. The diode and the fuse only work as a pair — neither protects anything on its own. Nothing is in series with the supply, so no voltage is lost to protection.
+Draws up to 700 mA. The jack feeds the 5 V rail directly; there is no fuse and no reverse-polarity protection.
 
 ### IF-2 — Controller to register chain
 

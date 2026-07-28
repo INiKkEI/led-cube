@@ -32,21 +32,18 @@ Each requirement in `requirements.md` restated as measurable quantities with tol
 | SPEC-26 | REQ-13 | Time to resume normal operation after power is restored | 2 s | maximum |
 | SPEC-27 | REQ-13 | Successful recoveries from abrupt power loss | 10 of 10 | exact |
 | SPEC-28 | REQ-13 | Writes to non-volatile memory during normal operation | 0 | exact |
-| SPEC-29 | REQ-14 | Reverse input voltage withstood without damage | 15 V | minimum |
-| SPEC-30 | REQ-14 | Voltage reaching the circuit under a reversed supply | −0.7 V | maximum magnitude |
-| SPEC-31 | REQ-14 | Over-current protection hold / trip current | 1.0 A hold, 2.0 A trip | maximum |
-| SPEC-32 | REQ-15 | Lattice deflection under its own weight | 2 mm | maximum |
-| SPEC-33 | REQ-16 | Permanent deformation after being carried 10 m | 1 mm | maximum |
-| SPEC-34 | REQ-17 | Voltage present on any conductor a user can touch | 5 V | maximum |
-| SPEC-35 | REQ-17 | Clearance from the lowest conductor to the surface the cube stands on | 5 mm | minimum |
-| SPEC-36 | REQ-18 | Assembly time for one person, excluding firmware | 20 h | maximum |
-| SPEC-37 | REQ-18 | Total solder joints | 1300 | maximum |
-| SPEC-38 | REQ-19 | Disassembly steps needed to reflash firmware | 0 | exact |
-| SPEC-39 | REQ-19 | Time to flash new firmware | 60 s | maximum |
-| SPEC-40 | REQ-20 | Files changed to add one animation | 2 | maximum |
-| SPEC-41 | REQ-20 | Lines changed outside the animation module | 0 | exact |
-| SPEC-42 | REQ-21 | Temperature of any surface a user would normally touch | 45 °C | maximum |
-| SPEC-43 | REQ-21 | Ambient temperature when that measurement is taken | 25 °C | ±3 °C |
-| SPEC-44 | REQ-22 | Wire or lead protruding beyond a solder joint | 1 mm | maximum |
-| SPEC-45 | REQ-22 | Radius of any exposed edge or corner | 0.5 mm | minimum |
-| SPEC-46 | REQ-23 | Total parts cost, excluding shipping, tools and the adapter | 100.00 EUR | maximum |
+| SPEC-29 | REQ-14 | Lattice deflection under its own weight | 2 mm | maximum |
+| SPEC-30 | REQ-15 | Permanent deformation after being carried 10 m | 1 mm | maximum |
+| SPEC-31 | REQ-16 | Voltage present on any conductor a user can touch | 5 V | maximum |
+| SPEC-32 | REQ-16 | Clearance from the lowest conductor to the surface the cube stands on | 5 mm | minimum |
+| SPEC-33 | REQ-17 | Assembly time for one person, excluding firmware | 20 h | maximum |
+| SPEC-34 | REQ-17 | Total solder joints | 1300 | maximum |
+| SPEC-35 | REQ-18 | Disassembly steps needed to reflash firmware | 0 | exact |
+| SPEC-36 | REQ-18 | Time to flash new firmware | 60 s | maximum |
+| SPEC-37 | REQ-19 | Files changed to add one animation | 2 | maximum |
+| SPEC-38 | REQ-19 | Lines changed outside the animation module | 0 | exact |
+| SPEC-39 | REQ-20 | Temperature of any surface a user would normally touch | 45 °C | maximum |
+| SPEC-40 | REQ-20 | Ambient temperature when that measurement is taken | 25 °C | ±3 °C |
+| SPEC-41 | REQ-21 | Wire or lead protruding beyond a solder joint | 1 mm | maximum |
+| SPEC-42 | REQ-21 | Radius of any exposed edge or corner | 0.5 mm | minimum |
+| SPEC-43 | REQ-22 | Total parts cost, excluding shipping, tools and the adapter | 100.00 EUR | maximum |

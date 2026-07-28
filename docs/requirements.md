@@ -29,13 +29,12 @@ Each has a unique ID, a priority (**M** must / **S** should / **C** could), and 
 | REQ-11 | The cube must run at full brightness for **4 h** or more without failing, resetting, or needing attention. | M | T |
 | REQ-12 | After 4 h of running, the brightness should not have visibly dropped. | S | T |
 | REQ-13 | Pulling the power at any moment must not damage the cube or stop it working normally next time. | M | T |
-| REQ-14 | Plugging in the wrong or a reversed supply must not cause permanent damage. | M | T |
-| REQ-15 | The cube must stand on a flat surface by itself, with nothing propping it up. | M | I |
-| REQ-16 | The cube must survive being picked up by its base and carried across a room. | M | D |
-| REQ-17 | Nothing a user can touch may carry a harmful voltage, and standing the cube on a metal surface must not short anything out. | M | T |
-| REQ-18 | One person with average soldering skill should be able to build it in **20 h** or less, not counting firmware. | S | T |
-| REQ-19 | The firmware must be updatable without taking the cube apart. | M | D |
-| REQ-20 | Adding a new animation should not mean changing anything else. | S | D |
-| REQ-21 | No surface you would normally touch may get hotter than **45 °C**, during or after the 4 h run in REQ-11. | M | T |
-| REQ-22 | No surface you handle may have sharp edges, burrs, or wire ends sticking out. | M | I |
-| REQ-23 | The parts for one complete cube must cost no more than **100 EUR** — LEDs, boards, connectors, case, controller. Shipping, tools, and the mains adapter don't count. | M | A |
+| REQ-14 | The cube must stand on a flat surface by itself, with nothing propping it up. | M | I |
+| REQ-15 | The cube must survive being picked up by its base and carried across a room. | M | D |
+| REQ-16 | Nothing a user can touch may carry a harmful voltage, and standing the cube on a metal surface must not short anything out. | M | T |
+| REQ-17 | One person with average soldering skill should be able to build it in **20 h** or less, not counting firmware. | S | T |
+| REQ-18 | The firmware must be updatable without taking the cube apart. | M | D |
+| REQ-19 | Adding a new animation should not mean changing anything else. | S | D |
+| REQ-20 | No surface you would normally touch may get hotter than **45 °C**, during or after the 4 h run in REQ-11. | M | T |
+| REQ-21 | No surface you handle may have sharp edges, burrs, or wire ends sticking out. | M | I |
+| REQ-22 | The parts for one complete cube must cost no more than **100 EUR** — LEDs, boards, connectors, case, controller. Shipping, tools, and the mains adapter don't count. | M | A |

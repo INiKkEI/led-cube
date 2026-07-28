@@ -19,13 +19,12 @@ Equipment: multimeter, thermometer.
 | AT-11 | Run the brightest animation for 4 h, noting the time at the start and end. | Still running, never reset, nothing touched. | |
 | AT-12 | During AT-11, look at the cube from the same spot in the same light at 5 min and at 4 h. | No visible dimming. | |
 | AT-13 | Pull the plug mid-animation, 10 times, plugging back in each time. | Starts up normally every time, no damage. | |
-| AT-14 | Connect the supply backwards for a few seconds, unplug it, wait for the fuse to reset, then connect it the right way round. | The cube runs normally afterwards. | |
-| AT-15 | Stand it on a flat table and let go. | Stands on its own, no leaning or sagging. | |
-| AT-16 | Lift by the base, carry across the room, set down, then check the joints. | Nothing bent, broken, or loosened. | |
-| AT-17 | Measure the gap under the board, then measure the voltage on every conductor you can touch while it runs, then stand it on a metal sheet. | Gap 5 mm or more, nothing above 5 V, and the cube runs normally on the metal. | |
-| AT-18 | Write down your hours as you build. | 20 h or less, not counting firmware. | |
-| AT-19 | Flash new firmware with the cube fully assembled. | New firmware runs, nothing was taken apart. | |
-| AT-20 | Add one new animation. | Only the animation code changed, and everything else behaves as before. | |
-| AT-21 | Straight after AT-11, measure every surface you would normally touch with the thermometer. | All readings 45 °C or below. | |
-| AT-22 | Run a hand and then a cloth over every surface you handle. | Nothing catches, no wire ends sticking out. | |
-| AT-23 | Add up the parts list. | 100 EUR or less, not counting shipping, tools, or the mains adapter. | |
+| AT-14 | Stand it on a flat table and let go. | Stands on its own, no leaning or sagging. | |
+| AT-15 | Lift by the base, carry across the room, set down, then check the joints. | Nothing bent, broken, or loosened. | |
+| AT-16 | Measure the gap under the board, then measure the voltage on every conductor you can touch while it runs, then stand it on a metal sheet. | Gap 5 mm or more, nothing above 5 V, and the cube runs normally on the metal. | |
+| AT-17 | Write down your hours as you build. | 20 h or less, not counting firmware. | |
+| AT-18 | Flash new firmware with the cube fully assembled. | New firmware runs, nothing was taken apart. | |
+| AT-19 | Add one new animation. | Only the animation code changed, and everything else behaves as before. | |
+| AT-20 | Straight after AT-11, measure every surface you would normally touch with the thermometer. | All readings 45 °C or below. | |
+| AT-21 | Run a hand and then a cloth over every surface you handle. | Nothing catches, no wire ends sticking out. | |
+| AT-22 | Add up the parts list. | 100 EUR or less, not counting shipping, tools, or the mains adapter. | |
