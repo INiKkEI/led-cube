@@ -38,17 +38,16 @@ Each requirement in `requirements.md` restated as measurable quantities with tol
 | SPEC-32 | REQ-15 | Tilt from level before the cube topples | 15° | minimum |
 | SPEC-33 | REQ-15 | Lattice deflection under its own weight | 2 mm | maximum |
 | SPEC-34 | REQ-16 | Permanent deformation after being carried 10 m | 1 mm | maximum |
-| SPEC-35 | REQ-16 | Pull force each LED lead joint withstands | 5 N | minimum |
-| SPEC-36 | REQ-17 | Voltage present on any conductor a user can touch | 5 V | maximum |
-| SPEC-37 | REQ-17 | Clearance from the lowest conductor to the surface the cube stands on | 5 mm | minimum |
-| SPEC-38 | REQ-18 | Assembly time for one person, excluding firmware | 20 h | maximum |
-| SPEC-39 | REQ-18 | Total solder joints | 1300 | maximum |
-| SPEC-40 | REQ-19 | Disassembly steps needed to reflash firmware | 0 | exact |
-| SPEC-41 | REQ-19 | Time to flash new firmware | 60 s | maximum |
-| SPEC-42 | REQ-20 | Files changed to add one animation | 2 | maximum |
-| SPEC-43 | REQ-20 | Lines changed outside the animation module | 0 | exact |
-| SPEC-44 | REQ-21 | Temperature of any surface a user would normally touch | 45 °C | maximum |
-| SPEC-45 | REQ-21 | Ambient temperature when that measurement is taken | 25 °C | ±3 °C |
-| SPEC-46 | REQ-22 | Wire or lead protruding beyond a solder joint | 1 mm | maximum |
-| SPEC-47 | REQ-22 | Radius of any exposed edge or corner | 0.5 mm | minimum |
-| SPEC-48 | REQ-23 | Total parts cost, excluding shipping, tools and the adapter | 100.00 EUR | maximum |
+| SPEC-35 | REQ-17 | Voltage present on any conductor a user can touch | 5 V | maximum |
+| SPEC-36 | REQ-17 | Clearance from the lowest conductor to the surface the cube stands on | 5 mm | minimum |
+| SPEC-37 | REQ-18 | Assembly time for one person, excluding firmware | 20 h | maximum |
+| SPEC-38 | REQ-18 | Total solder joints | 1300 | maximum |
+| SPEC-39 | REQ-19 | Disassembly steps needed to reflash firmware | 0 | exact |
+| SPEC-40 | REQ-19 | Time to flash new firmware | 60 s | maximum |
+| SPEC-41 | REQ-20 | Files changed to add one animation | 2 | maximum |
+| SPEC-42 | REQ-20 | Lines changed outside the animation module | 0 | exact |
+| SPEC-43 | REQ-21 | Temperature of any surface a user would normally touch | 45 °C | maximum |
+| SPEC-44 | REQ-21 | Ambient temperature when that measurement is taken | 25 °C | ±3 °C |
+| SPEC-45 | REQ-22 | Wire or lead protruding beyond a solder joint | 1 mm | maximum |
+| SPEC-46 | REQ-22 | Radius of any exposed edge or corner | 0.5 mm | minimum |
+| SPEC-47 | REQ-23 | Total parts cost, excluding shipping, tools and the adapter | 100.00 EUR | maximum |
