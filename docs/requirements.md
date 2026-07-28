@@ -32,7 +32,7 @@ Each has a unique ID, a priority (**M** must / **S** should / **C** could), and 
 | REQ-14 | Plugging in the wrong or a reversed supply must not cause permanent damage. | M | T |
 | REQ-15 | The cube must stand on a flat surface by itself, with nothing propping it up. | M | I |
 | REQ-16 | The cube must survive being picked up by its base and carried across a room. | M | D |
-| REQ-17 | No live part may be touchable in normal use. | M | I |
+| REQ-17 | Nothing a user can touch may carry a harmful voltage, and standing the cube on a metal surface must not short anything out. | M | T |
 | REQ-18 | One person with average soldering skill should be able to build it in **20 h** or less, not counting firmware. | S | T |
 | REQ-19 | The firmware must be updatable without taking the cube apart. | M | D |
 | REQ-20 | Adding a new animation should not mean changing anything else. | S | D |

@@ -22,7 +22,7 @@ Equipment: multimeter, thermometer.
 | AT-14 | With the cube unplugged, measure resistance across the power input both ways round, then check the protection part is fitted the way the schematic shows. | The reverse direction reads open or very high, and the part is the right way round. | |
 | AT-15 | Stand it on a flat table and let go. | Stands on its own, no leaning or sagging. | |
 | AT-16 | Lift by the base, carry across the room, set down, then check the joints. | Nothing bent, broken, or loosened. | |
-| AT-17 | Unplug it, then use the multimeter to check continuity between every touchable surface and the supply rails. | No continuity anywhere. | |
+| AT-17 | Measure the gap under the board, then measure the voltage on every conductor you can touch while it runs, then stand it on a metal sheet. | Gap 5 mm or more, nothing above 5 V, and the cube runs normally on the metal. | |
 | AT-18 | Write down your hours as you build. | 20 h or less, not counting firmware. | |
 | AT-19 | Flash new firmware with the cube fully assembled. | New firmware runs, nothing was taken apart. | |
 | AT-20 | Add one new animation. | Only the animation code changed, and everything else behaves as before. | |

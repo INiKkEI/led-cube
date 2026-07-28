@@ -1,35 +1,35 @@
 # LED Cube — Traceability
 
-Links each requirement in `requirements.md` to the test in `acceptance-plan.md` that verifies it.
+Links each requirement in `requirements.md` to the quantities in `system-specifications.md` that make it measurable, and to the test in `acceptance-plan.md` that verifies it.
 
-| Requirement | What it covers | Pri | Test |
-|---|---|:--:|---|
-| REQ-01 | At least 5 different animations | M | AT-01 |
-| REQ-02 | Button changes the animation | M | AT-02 |
-| REQ-03 | One press gives exactly one change | M | AT-03 |
-| REQ-04 | Animations cycle round, none unreachable | M | AT-04 |
-| REQ-05 | No visible flicker or stutter | M | AT-05 |
-| REQ-06 | LEDs that are off stay dark | M | AT-06 |
-| REQ-07 | Even brightness across the cube | S | AT-07 |
-| REQ-08 | Readable in daylight | M | AT-08 |
-| REQ-09 | LEDs straight and evenly spaced | M | AT-09 |
-| REQ-10 | Runs from one ordinary adapter | M | AT-10 |
-| REQ-11 | 4 h continuous run | M | AT-11 |
-| REQ-12 | No dimming over 4 h | S | AT-12 |
-| REQ-13 | Survives losing power | M | AT-13 |
-| REQ-14 | Survives a wrong or reversed supply | M | AT-14 |
-| REQ-15 | Stands unaided | M | AT-15 |
-| REQ-16 | Survives being carried | M | AT-16 |
-| REQ-17 | No touchable live parts | M | AT-17 |
-| REQ-18 | Buildable in 20 h | S | AT-18 |
-| REQ-19 | Reflash without dismantling | M | AT-19 |
-| REQ-20 | New animation without touching anything else | S | AT-20 |
-| REQ-21 | Touchable surfaces stay under 45 °C | M | AT-21 |
-| REQ-22 | No sharp edges or wire ends | M | AT-22 |
-| REQ-23 | Parts cost 100 EUR or less | M | AT-23 |
+| Requirement | What it covers | Pri | Specs | Test |
+|---|---|:--:|---|---|
+| REQ-01 | At least 5 different animations | M | SPEC-01 | AT-01 |
+| REQ-02 | Button changes the animation | M | SPEC-02 | AT-02 |
+| REQ-03 | One press gives exactly one change | M | SPEC-03, SPEC-04 | AT-03 |
+| REQ-04 | Animations cycle round, none unreachable | M | SPEC-05 | AT-04 |
+| REQ-05 | No visible flicker or stutter | M | SPEC-06 … SPEC-09 | AT-05 |
+| REQ-06 | LEDs that are off stay dark | M | SPEC-10, SPEC-11 | AT-06 |
+| REQ-07 | Even brightness across the cube | S | SPEC-12 | AT-07 |
+| REQ-08 | Readable in daylight | M | SPEC-13, SPEC-14 | AT-08 |
+| REQ-09 | LEDs straight and evenly spaced | M | SPEC-15 … SPEC-17 | AT-09 |
+| REQ-10 | Runs from one ordinary adapter | M | SPEC-18 … SPEC-20 | AT-10 |
+| REQ-11 | 4 h continuous run | M | SPEC-21 … SPEC-24 | AT-11 |
+| REQ-12 | No dimming over 4 h | S | SPEC-25 | AT-12 |
+| REQ-13 | Survives losing power | M | SPEC-26 … SPEC-28 | AT-13 |
+| REQ-14 | Survives a wrong or reversed supply | M | SPEC-29 … SPEC-31 | AT-14 |
+| REQ-15 | Stands unaided | M | SPEC-32, SPEC-33 | AT-15 |
+| REQ-16 | Survives being carried | M | SPEC-34, SPEC-35 | AT-16 |
+| REQ-17 | Safe to touch, and safe to stand on metal | M | SPEC-36, SPEC-37 | AT-17 |
+| REQ-18 | Buildable in 20 h | S | SPEC-38, SPEC-39 | AT-18 |
+| REQ-19 | Reflash without dismantling | M | SPEC-40, SPEC-41 | AT-19 |
+| REQ-20 | New animation without touching anything else | S | SPEC-42, SPEC-43 | AT-20 |
+| REQ-21 | Touchable surfaces stay under 45 °C | M | SPEC-44, SPEC-45 | AT-21 |
+| REQ-22 | No sharp edges or wire ends | M | SPEC-46, SPEC-47 | AT-22 |
+| REQ-23 | Parts cost 100 EUR or less | M | SPEC-48 | AT-23 |
 
 ## Coverage
 
-23 requirements, 23 tests, one test each. No requirement is untested, and no test verifies something that isn't a requirement.
+23 requirements, 48 specifications, 23 tests. Every requirement is quantified by at least one specification and verified by one test. No specification exists without a requirement behind it, and no test verifies something that isn't a requirement.
 
 19 requirements are **M** (must) and 4 are **S** (should): REQ-07, REQ-12, REQ-18, REQ-20. Those four are the ones that may fail with a written reason; the other 19 have to pass.
