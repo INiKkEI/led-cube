@@ -33,7 +33,7 @@ Each requirement in `requirements.md` restated as measurable quantities with tol
 | SPEC-27 | REQ-13 | Successful recoveries from abrupt power loss | 10 of 10 | exact |
 | SPEC-28 | REQ-13 | Writes to non-volatile memory during normal operation | 0 | exact |
 | SPEC-29 | REQ-14 | Reverse input voltage withstood without damage | 15 V | minimum |
-| SPEC-30 | REQ-14 | Current drawn under reversed supply | 1 mA | maximum |
+| SPEC-30 | REQ-14 | Voltage reaching the circuit under a reversed supply | −0.7 V | maximum magnitude |
 | SPEC-31 | REQ-14 | Over-current protection hold / trip current | 1.0 A hold, 2.0 A trip | maximum |
 | SPEC-32 | REQ-15 | Lattice deflection under its own weight | 2 mm | maximum |
 | SPEC-33 | REQ-16 | Permanent deformation after being carried 10 m | 1 mm | maximum |

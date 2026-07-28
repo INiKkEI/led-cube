@@ -34,8 +34,8 @@ Equipment: multimeter, thermometer, calipers, a firmware debug mode that prints 
 | ST-26 | Pull the plug mid-animation, restore it, and time how long until an animation is running. Repeat 10 times. | Every time 2 s or less. | |
 | ST-27 | Across those same 10 trials, watch for anything abnormal on restart. | 10 normal starts out of 10. | |
 | ST-28 | Search the firmware for flash, EEPROM, or NVS write calls outside first-boot setup. | None found. | |
-| ST-29 | Read the reverse-protection MOSFET's Vds rating and check it is fitted the way the schematic shows. | Rated 15 V or more, and correctly oriented. | |
-| ST-30 | With the cube unplugged, measure resistance across the power input in the reverse direction. | 15 kΩ or higher. | |
+| ST-29 | Check the protection diode is fitted cathode to +5 V, and compare its surge current rating against the fuse's trip current and trip time. | Correctly oriented, and rated to carry the fault current until the fuse trips. | |
+| ST-30 | With the cube unplugged, put the multimeter in diode mode across the power input, probing so the diode conducts. | Reads a normal forward drop, 0.7 V or less. | |
 | ST-31 | Read the hold and trip currents from the fuse datasheet. | Holds at 1.0 A, trips by 2.0 A. | |
 | ST-32 | Straightedge across the top layer, measure the sag in the middle. | 2 mm or less. | |
 | ST-33 | Measure a few LED spacings, carry the cube 10 m by its base, then measure the same ones again. | No spacing changed by more than 1 mm. | |

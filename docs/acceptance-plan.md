@@ -19,7 +19,7 @@ Equipment: multimeter, thermometer.
 | AT-11 | Run the brightest animation for 4 h, noting the time at the start and end. | Still running, never reset, nothing touched. | |
 | AT-12 | During AT-11, look at the cube from the same spot in the same light at 5 min and at 4 h. | No visible dimming. | |
 | AT-13 | Pull the plug mid-animation, 10 times, plugging back in each time. | Starts up normally every time, no damage. | |
-| AT-14 | With the cube unplugged, measure resistance across the power input both ways round, then check the protection part is fitted the way the schematic shows. | The reverse direction reads open or very high, and the part is the right way round. | |
+| AT-14 | Connect the supply backwards for a few seconds, unplug it, wait for the fuse to reset, then connect it the right way round. | The cube runs normally afterwards. | |
 | AT-15 | Stand it on a flat table and let go. | Stands on its own, no leaning or sagging. | |
 | AT-16 | Lift by the base, carry across the room, set down, then check the joints. | Nothing bent, broken, or loosened. | |
 | AT-17 | Measure the gap under the board, then measure the voltage on every conductor you can touch while it runs, then stand it on a metal sheet. | Gap 5 mm or more, nothing above 5 V, and the cube runs normally on the metal. | |
