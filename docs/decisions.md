@@ -426,3 +426,38 @@ A firmware debug mode counts interrupts and prints measured timing over the seri
 - Measurement is continuous rather than a snapshot, which catches intermittent jitter that a scope trace might miss.
 - The firmware is measuring itself. A fault in the timer configuration could plausibly produce both wrong behaviour and a wrong report of it — an external instrument would be an independent check, and remains worth borrowing once.
 - The debug mode is a permanent part of the firmware, not scaffolding.
+
+---
+
+## ADR-15 — VSPI pins, avoiding the strapping pins
+
+**Status:** Accepted
+
+### Context
+
+The design needs five ESP32 pins: SCK, MOSI, LATCH, OE and a button. The module exposes far more than five, but they are not interchangeable — several groups cannot be used at all, and the SPI peripheral has two different default pin sets.
+
+### Decision
+
+VSPI defaults for the bus — SCK on GPIO 18, MOSI on GPIO 23 — with LATCH on GPIO 21, OE on GPIO 22 and the button on GPIO 27.
+
+### Reasoning
+
+Three groups of pins are unavailable before any choice is made:
+
+| Pins | Why |
+|---|---|
+| GPIO 6–11 | Wired to the internal SPI flash. Using them stops the chip working. |
+| GPIO 34–39 | Input only, with no internal pull-ups. Cannot drive anything, and cannot host the button. |
+| GPIO 1, 3 | UART0, used by the USB-serial bridge for flashing and the debug output that ADR-14 depends on. |
+
+That leaves the choice between the two hardware SPI peripherals. **HSPI's defaults are GPIO 13, 12, 14 and 15 — and both GPIO 12 and GPIO 15 are strapping pins**, sampled at power-on to configure the chip. GPIO 12 sets the flash voltage and must be low at that moment. A shift register input holding it high would leave the board unable to boot, and the symptom looks like a dead module rather than a wiring error.
+
+VSPI's defaults (GPIO 18 and 23) are ordinary pins. The remaining three signals were placed on GPIO 21, 22 and 27, none of which is a strapping pin either.
+
+### Consequences
+
+- Hardware SPI is used at its default pins, so no remapping is needed in firmware.
+- No signal touches a strapping pin, so nothing the cube does can prevent the board from starting.
+- OE needs an external pull-up rather than a firmware default, because the pin is high-impedance until firmware runs — recorded in IF-2.
+- Five pins used of roughly a dozen unrestricted ones. Ample room for a second button or a status LED later.

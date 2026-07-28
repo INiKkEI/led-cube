@@ -55,7 +55,13 @@ Draws up to 700 mA. The jack feeds the 5 V rail directly; there is no fuse and n
 | LATCH | ESP32 → registers | 3.3 V | Rising edge moves the shifted bits to the outputs |
 | OE | ESP32 → registers | 3.3 V | Active low. Held high to blank the display |
 
+**SPI mode 0, MSB first.** The 595 samples its data input on the rising edge of the shift clock, which is what mode 0 delivers — clock idle low, data changed on the falling edge and sampled on the rising one. Mode 3 also samples on a rising edge and would work; modes 1 and 2 sample on the falling edge and would not. MSB-first ordering is what makes the byte-order rule below hold — LSB-first would mirror each group of eight columns within itself.
+
+**LATCH is a plain GPIO, not the SPI chip-select.** Wiring it to hardware CS works in some drivers, since CS rising at the end of a transfer would latch the data. It is avoided here for two reasons: it depends on the driver holding CS asserted across all nine bytes rather than pulsing it per byte, and blanking needs the latch fired at a chosen moment in the sequence — disable outputs, shift, latch, switch layer, re-enable — rather than as a side effect of the transfer ending.
+
 The registers run from 5 V while the ESP32 drives 3.3 V. HCT parts are used rather than HC because HCT input thresholds accept 3.3 V as a valid high at a 5 V supply; HC does not.
+
+Two of these lines need resistors rather than firmware defaults, because every ESP32 pin is high-impedance until firmware configures it — and at that moment the registers already hold whatever data they powered up with. **OE takes a 10 kΩ pull-up to +3.3 V**, holding the display blank from the instant power arrives. **LATCH takes a 10 kΩ pull-down to ground**, so a floating line cannot clock noise through to the outputs during boot. The OE pull-up goes to 3.3 V and not 5 V because ESP32 pins are not 5 V tolerant; HCT's 2.0 V input threshold means 3.3 V is still a solid high on a 5 V part.
 
 Chain order is MOSI into column register 1, through to column register 8, then into the layer register. Because bits shift along, the first byte sent travels furthest — firmware transmits the layer byte first, then the eight column bytes in reverse order. 72 bits per layer, 576 per frame.
 
@@ -65,7 +71,7 @@ Chain order is MOSI into column register 1, through to column register 8, then i
 |---|---|---|---|
 | COL0–COL63 | registers → matrix | 5 V logic, active high | One line per column, each through its own 220 Ω resistor |
 
-Each line sources about 6 mA when high. Up to eight lines per package are active at once, so each register passes around 50 mA — against a 70 mA absolute maximum, which is why the resistor is never reduced.
+Each line sources about 6 mA when high. Up to eight lines per package are active at once, so each register passes about 48 mA — against a 70 mA absolute maximum, which is why the resistor is never reduced.
 
 ### IF-4 — Layer register to layer switches
 
