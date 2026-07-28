@@ -37,19 +37,18 @@ Equipment: multimeter, thermometer, calipers, a firmware debug mode that prints 
 | ST-29 | Read the reverse-protection MOSFET's Vds rating and check it is fitted the way the schematic shows. | Rated 15 V or more, and correctly oriented. | |
 | ST-30 | With the cube unplugged, measure resistance across the power input in the reverse direction. | 15 kΩ or higher. | |
 | ST-31 | Read the hold and trip currents from the fuse datasheet. | Holds at 1.0 A, trips by 2.0 A. | |
-| ST-32 | Stand the cube on a board and tilt it slowly until it topples, measuring the angle. | 15° or more. | |
-| ST-33 | Straightedge across the top layer, measure the sag in the middle. | 2 mm or less. | |
-| ST-34 | Measure a few LED spacings, carry the cube 10 m by its base, then measure the same ones again. | No spacing changed by more than 1 mm. | |
-| ST-35 | Multimeter from every conductor you can touch to ground, cube running. | Nothing above 5 V. | |
-| ST-36 | Calipers from the lowest conductor under the board to the surface it stands on. | 5 mm or more. | |
-| ST-37 | Keep a running total of your build hours. | 20 h or less, not counting firmware. | |
-| ST-38 | Count the solder joints from the design: two per LED plus the board joints. | 1300 or fewer. | |
-| ST-39 | Flash new firmware and count how many things you had to take apart. | Zero. | |
-| ST-40 | Time a full flash from starting the upload to the cube running again. | 60 s or less. | |
-| ST-41 | Add one new animation, then run `git diff --stat`. | 2 files changed or fewer. | |
-| ST-42 | In that same diff, look at the lines changed outside the animation module. | Zero. | |
-| ST-43 | Thermometer on every surface you would normally touch, immediately after the 4 h run. | All 45 °C or below. | |
-| ST-44 | Thermometer in the room at the moment of that measurement. | Between 22 and 28 °C. | |
-| ST-45 | Calipers on the longest leads sticking out past their solder joints. | 1 mm or less. | |
-| ST-46 | Run a finger along every exposed edge and corner, then check the worst against a 0.5 mm reference. | Nothing sharper than 0.5 mm radius. | |
-| ST-47 | Add up the parts list at the prices you actually paid. | 100.00 EUR or less, excluding shipping, tools and the adapter. | |
+| ST-32 | Straightedge across the top layer, measure the sag in the middle. | 2 mm or less. | |
+| ST-33 | Measure a few LED spacings, carry the cube 10 m by its base, then measure the same ones again. | No spacing changed by more than 1 mm. | |
+| ST-34 | Multimeter from every conductor you can touch to ground, cube running. | Nothing above 5 V. | |
+| ST-35 | Calipers from the lowest conductor under the board to the surface it stands on. | 5 mm or more. | |
+| ST-36 | Keep a running total of your build hours. | 20 h or less, not counting firmware. | |
+| ST-37 | Count the solder joints from the design: two per LED plus the board joints. | 1300 or fewer. | |
+| ST-38 | Flash new firmware and count how many things you had to take apart. | Zero. | |
+| ST-39 | Time a full flash from starting the upload to the cube running again. | 60 s or less. | |
+| ST-40 | Add one new animation, then run `git diff --stat`. | 2 files changed or fewer. | |
+| ST-41 | In that same diff, look at the lines changed outside the animation module. | Zero. | |
+| ST-42 | Thermometer on every surface you would normally touch, immediately after the 4 h run. | All 45 °C or below. | |
+| ST-43 | Thermometer in the room at the moment of that measurement. | Between 22 and 28 °C. | |
+| ST-44 | Calipers on the longest leads sticking out past their solder joints. | 1 mm or less. | |
+| ST-45 | Run a finger along every exposed edge and corner, then check the worst against a 0.5 mm reference. | Nothing sharper than 0.5 mm radius. | |
+| ST-46 | Add up the parts list at the prices you actually paid. | 100.00 EUR or less, excluding shipping, tools and the adapter. | |

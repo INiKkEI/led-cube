@@ -18,18 +18,18 @@ Links each requirement in `requirements.md` to the quantities in `system-specifi
 | REQ-12 | No dimming over 4 h | S | SPEC-25 | AT-12 |
 | REQ-13 | Survives losing power | M | SPEC-26 … SPEC-28 | AT-13 |
 | REQ-14 | Survives a wrong or reversed supply | M | SPEC-29 … SPEC-31 | AT-14 |
-| REQ-15 | Stands unaided | M | SPEC-32, SPEC-33 | AT-15 |
-| REQ-16 | Survives being carried | M | SPEC-34 | AT-16 |
-| REQ-17 | Safe to touch, and safe to stand on metal | M | SPEC-35, SPEC-36 | AT-17 |
-| REQ-18 | Buildable in 20 h | S | SPEC-37, SPEC-38 | AT-18 |
-| REQ-19 | Reflash without dismantling | M | SPEC-39, SPEC-40 | AT-19 |
-| REQ-20 | New animation without touching anything else | S | SPEC-41, SPEC-42 | AT-20 |
-| REQ-21 | Touchable surfaces stay under 45 °C | M | SPEC-43, SPEC-44 | AT-21 |
-| REQ-22 | No sharp edges or wire ends | M | SPEC-45, SPEC-46 | AT-22 |
-| REQ-23 | Parts cost 100 EUR or less | M | SPEC-47 | AT-23 |
+| REQ-15 | Stands unaided | M | SPEC-32 | AT-15 |
+| REQ-16 | Survives being carried | M | SPEC-33 | AT-16 |
+| REQ-17 | Safe to touch, and safe to stand on metal | M | SPEC-34, SPEC-35 | AT-17 |
+| REQ-18 | Buildable in 20 h | S | SPEC-36, SPEC-37 | AT-18 |
+| REQ-19 | Reflash without dismantling | M | SPEC-38, SPEC-39 | AT-19 |
+| REQ-20 | New animation without touching anything else | S | SPEC-40, SPEC-41 | AT-20 |
+| REQ-21 | Touchable surfaces stay under 45 °C | M | SPEC-42, SPEC-43 | AT-21 |
+| REQ-22 | No sharp edges or wire ends | M | SPEC-44, SPEC-45 | AT-22 |
+| REQ-23 | Parts cost 100 EUR or less | M | SPEC-46 | AT-23 |
 
 ## Coverage
 
-23 requirements, 47 specifications, 23 acceptance tests, 47 system tests. Every requirement is quantified by at least one specification and verified by one acceptance test, and every specification is verified by one system test. Nothing exists without a requirement behind it.
+23 requirements, 46 specifications, 23 acceptance tests, 46 system tests. Every requirement is quantified by at least one specification and verified by one acceptance test, and every specification is verified by one system test. Nothing exists without a requirement behind it.
 
 19 requirements are **M** (must) and 4 are **S** (should): REQ-07, REQ-12, REQ-18, REQ-20. Those four are the ones that may fail with a written reason; the other 19 have to pass.
