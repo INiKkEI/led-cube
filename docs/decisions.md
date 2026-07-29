@@ -166,16 +166,18 @@ The resistor sets LED current. The exact 74HCT595 part is not chosen yet — it 
 A shift register output is not an ideal voltage source. It behaves as 5 V behind an internal resistance of roughly 50–85 Ω depending on manufacturer, in series with the external resistor:
 
 ```
-I = (5 V − Vf − Vds) / (Rout + R)
-  = (5.0 − 3.2 − 0.05) / (Rout + R)
+I = (5 V − Vf) / (Rout + R)
+  = (5.0 − 3.2) / (Rout + R)
 ```
+
+The layer MOSFET is in this loop too, but at 3 mΩ it drops about 1 mV and is left out.
 
 | R | Current (weak chip, 85 Ω) | Current (strong chip, 50 Ω) | Package load | % of 70 mA max | Spread |
 |---|---|---|---|---|---|
-| 150 Ω | 7.4 mA | 8.7 mA | 60–70 mA | **85–100 %** | ±8.0 % |
-| **220 Ω** | **5.7 mA** | **6.5 mA** | **46–52 mA** | **66–74 %** | **±6.1 %** |
+| 150 Ω | 7.7 mA | 9.0 mA | 61–72 mA | **88–103 %** | ±8.0 % |
+| **220 Ω** | **5.9 mA** | **6.7 mA** | **47–53 mA** | **67–76 %** | **±6.1 %** |
 
-150 Ω reaches exactly 100 % of an absolute maximum rating on a strong chip. Absolute maximums are limits that must never be reached, not design targets.
+150 Ω exceeds the absolute maximum rating outright on a strong chip. Absolute maximums are limits that must never be reached, let alone passed.
 
 220 Ω is also *better* for uniformity, which is counter-intuitive. The external resistor is identical across all 64 columns; the chip's internal resistance is the part that varies. Making the external resistor larger means it dominates the total, so chip-to-chip variation shrinks from ±8 % to ±6.1 %.
 
@@ -183,7 +185,7 @@ I = (5 V − Vf − Vds) / (Rout + R)
 
 - Safe with any 74HCT595 variant, which was the point — the part can be chosen on price.
 - Roughly 20 % dimmer than 150 Ω would have been, on a design already marginal for brightness.
-- Operating range 5.7–6.5 mA peak, taken as 6 mA nominal: 0.75 mA average at 12.5 % duty, 384 mA per layer.
+- Operating range 5.9–6.7 mA peak, taken as 6.3 mA nominal: 0.78 mA average at 12.5 % duty, 401 mA per layer.
 - Never reduce this value. It is the only thing keeping the shift registers inside their rating.
 
 ---
@@ -461,3 +463,58 @@ VSPI's defaults (GPIO 18 and 23) are ordinary pins. The remaining three signals 
 - No signal touches a strapping pin, so nothing the cube does can prevent the board from starting.
 - OE needs an external pull-up rather than a firmware default, because the pin is high-impedance until firmware runs — recorded in IF-2.
 - Five pins used of roughly a dozen unrestricted ones. Ample room for a second button or a status LED later.
+
+---
+
+## ADR-16 — IRLB3813PBF layer switches
+
+**Status:** Accepted
+
+### Context
+
+Eight N-channel MOSFETs pull each layer's cathode line to ground. Each carries the whole current of one layer — about 400 mA — and each gate is driven from a 74HCT595 output running at 5 V.
+
+### Decision
+
+IRLB3813PBF, TO-220, one per layer.
+
+### Reasoning
+
+The binding requirement is not current or voltage — it is that the part must be **fully on at 5 V**, which almost no MOSFET datasheet advertises clearly.
+
+Most parts quote R_DS(on) at V_GS = 10 V, where anything looks good. The gate here sees at most the 595's supply, and the rail can sag to 4.75 V. So the only figure that matters is R_DS(on) **specified at V_GS = 4.5 V**; if a datasheet has no such row, the part is not characterised for this use.
+
+A candidate was rejected on exactly this basis. The HUF75339P3 looks excellent at first glance — 55 V, 75 A, 12 mΩ — but its table gives R_DS(on) only at V_GS = 10 V and a threshold voltage of **up to 4 V**. A worst-case device would need 4 V just to begin conducting 250 µA, leaving 1 V of overdrive from a 5 V drive. It would sit in its linear region at ohms rather than milliohms, and at 400 mA even 1 Ω would swallow 400 mV of the 1.8 V budget.
+
+| | IRLB3813PBF |
+|---|---|
+| R_DS(on) at V_GS = 4.5 V | ~3 mΩ |
+| V_GS(th) max | 2.35 V |
+| V_DS | 30 V |
+| I_D | 260 A |
+| Q_g typ | 57 nC |
+
+At 400 mA that is a 1.2 mV drop and 0.5 mW dissipated — negligible against the 950 mV across the column resistor.
+
+### Consequences
+
+- Grossly oversized for 400 mA, but the margin is free and the part is common.
+- No heatsinking needed despite the TO-220 package.
+- Gates are driven directly from the register, with no series resistor and no pull-down — see the note below.
+- When substituting, the first datasheet row to check is R_DS(on) at 4.5 V, and the second is V_GS(th) maximum. In that order.
+
+### Gate drive — no series resistor
+
+A 470 Ω series resistor was specified and then dropped. Recorded because the reasoning matters if the design is revisited.
+
+The gate is a capacitor — 57 nC, roughly 11 nF equivalent — so when a register output goes high the current is limited only by the register's own output resistance:
+
+```
+peak = 5 V / 67 Ω ≈ 75 mA        against a 35 mA per-pin absolute maximum
+```
+
+A 470 Ω resistor would have brought that to 9 mA at the cost of a 10 µs switching edge, well inside the 625 µs layer period. It was left out for part count.
+
+The overstress is brief — 0.76 µs time constant, so about 2 µs per switch, 1600 times a second, roughly 0.4 % of the time. Carried as RISK-09.
+
+The pull-down matters less. U9's OE is grounded, so its outputs are always actively driven and never float; only the instant of power-up is uncovered.

@@ -37,7 +37,7 @@ All nine share the same pin usage. U1–U8 drive the columns; U9 drives the laye
 | 15 | QA | First output of that register's group |
 | 1–7 | QB–QH | Remaining seven outputs |
 
-Each register needs a 100 nF capacitor between pins 16 and 8, placed at the chip.
+There are no local decoupling capacitors at the registers — the design relies on a single 470 µF bulk capacitor at the power jack.
 
 ### Why U9's OE is grounded
 

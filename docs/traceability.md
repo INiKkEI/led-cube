@@ -39,7 +39,7 @@ Links each interface in `architecture.md` to the tests in `integration-test-plan
 | IF-2 | Controller to register chain — SCK, MOSI, LATCH, OE | IT-02, IT-05, IT-06, IT-07, IT-10 |
 | IF-3 | Column registers to LED anodes, 64 lines | IT-03, IT-12, IT-13 |
 | IF-4 | Layer register to MOSFET gates, 8 lines | IT-11 |
-| IF-5 | Layer switches to ground, 8 cathode lines | IT-04, IT-11, IT-15 |
+| IF-5 | Layer switches to ground, 8 LAY lines | IT-04, IT-11, IT-15 |
 | IF-6 | Button to controller | IT-16 |
 | IF-7 | USB, for flashing and debug output | IT-01 |
 | IF-8 | Matrix to board, 72 through-holes | IT-08, IT-14 |

@@ -46,6 +46,8 @@ Columns are the anode side: a shift register output goes high and sources curren
 
 Draws up to 700 mA. The jack feeds the 5 V rail directly; there is no fuse and no reverse-polarity protection.
 
+A single **470 µF, 16 V** electrolytic sits across the rail at the jack. It is the only decoupling in the design — there are no 100 nF capacitors at the individual registers. Sized so that the ~400 mA step when blanking ends sags the rail about 50 mV over a 50 µs supply response, well inside the ±5 % in SPEC-18. See RISK-10 for what this omits.
+
 ### IF-2 — Controller to register chain
 
 | Signal | Direction | Level | Notes |
@@ -71,23 +73,37 @@ Chain order is MOSI into column register 1, through to column register 8, then i
 |---|---|---|---|
 | COL0–COL63 | registers → matrix | 5 V logic, active high | One line per column, each through its own 220 Ω resistor |
 
-Each line sources about 6 mA when high. Up to eight lines per package are active at once, so each register passes about 48 mA — against a 70 mA absolute maximum, which is why the resistor is never reduced.
+Each line sources about 6.3 mA when high. Up to eight lines per package are active at once, so each register passes about 50 mA — against a 70 mA absolute maximum, which is why the resistor is never reduced.
 
 ### IF-4 — Layer register to layer switches
 
 | Signal | Direction | Level | Notes |
 |---|---|---|---|
-| LAY0–LAY7 | register → MOSFET gates | 5 V logic, active high | High selects that layer |
+| GATE0–GATE7 | register → MOSFET gates | 5 V logic, active high | High selects that layer. Direct connection, no gate resistor |
 
-Exactly one line is high at any moment. Gates are capacitive, so the register sees a brief current spike on each change; this settles well inside the 625 µs a layer lasts.
+Exactly one line is high at any moment.
+
+The switches are **IRLB3813PBF** — N-channel, TO-220, logic level, 3 mΩ at V_GS = 4.5 V, 30 V, threshold 2.35 V maximum. The 4.5 V figure is what matters: the gate is driven from a 5 V shift register output and the rail can sag to 4.75 V, so a part characterised only at 10 V would be barely on.
+
+Gates connect straight to the register outputs, with no series resistor and no pull-down.
+
+**This exceeds the register's per-pin rating during switching.** A gate is a capacitor — 57 nC, about 11 nF equivalent — so at the moment an output goes high the current is limited only by the register's own ~67 Ω output resistance:
+
+```
+peak = 5 V / 67 Ω ≈ 75 mA        against a 35 mA per-pin absolute maximum
+```
+
+It is brief: the time constant is 0.76 µs, so the overcurrent lasts roughly 2 µs per switch. With 1600 switching events a second, an output is overstressed about 0.4 % of the time. Accepted deliberately — see RISK-09.
+
+The pull-down is a smaller loss. U9's OE is tied to ground, so its outputs are always actively driven and never float, leaving only the moment of power-up uncovered.
 
 ### IF-5 — Layer switches to ground
 
 | Signal | Direction | Level | Notes |
 |---|---|---|---|
-| CATH0–CATH7 | matrix → MOSFET drains | up to 384 mA | The whole current of one layer, 64 LEDs at 6 mA |
+| LAY0–LAY7 | matrix → MOSFET drains | up to 401 mA | The whole current of one layer, 64 LEDs at 6.3 mA |
 
-Only the selected layer's switch conducts. The other seven are open, which is what keeps unselected LEDs dark.
+Only the selected layer's switch conducts. The other seven are open, which is what keeps unselected LEDs dark. At 3 mΩ the conducting switch drops about 1 mV and dissipates half a milliwatt, so no heatsinking is needed despite the TO-220 package.
 
 ### IF-6 — Button to controller
 
@@ -110,7 +126,7 @@ Reachable without taking the cube apart. Not used in normal operation.
 
 | Signal | Direction | Level | Notes |
 |---|---|---|---|
-| COL0–COL63 | board → matrix | 6 mA per line | Column anodes, an 8 × 8 grid of holes at 900 mil pitch |
-| CATH0–CATH7 | matrix → board | up to 384 mA | Layer cathodes, one per layer, brought down to the board |
+| COL0–COL63 | board → matrix | 6.3 mA per line | Column anodes, an 8 × 8 grid of holes at 900 mil pitch |
+| LAY0–LAY7 | matrix → board | up to 401 mA | Layer cathodes, one per layer, brought down to the board |
 
 The lattice terminates in 72 plated through-holes on the controller board and solders directly into them. There is no connector, so the matrix and board are one assembly. The column grid alone occupies 160 × 160 mm, so the board cannot be smaller than the cube's footprint.
