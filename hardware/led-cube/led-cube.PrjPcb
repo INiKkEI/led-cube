@@ -69,7 +69,7 @@ GenerateClassCluster=0
 DocumentUniqueId=CSNAEZAQ
 
 [Document2]
-DocumentPath=Schlib1.SchLib
+DocumentPath=led-cube.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -83,10 +83,10 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=OFCJEYSB
+DocumentUniqueId=
 
 [Document3]
-DocumentPath=PcbLib1.PcbLib
+DocumentPath=led-cube.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -100,7 +100,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=TXUKNULP
+DocumentUniqueId=
 
 [GeneratedDocument1]
 DocumentPath=Project Outputs for led-cube\led-cube.NET
