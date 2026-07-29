@@ -83,7 +83,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=OFCJEYSB
 
 [Document3]
 DocumentPath=led-cube.PcbLib
@@ -100,10 +100,10 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=TXUKNULP
 
 [Document4]
-DocumentPath=PCB1.PcbDoc
+DocumentPath=led-cube.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -117,10 +117,10 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=ICWHKFHL
+DocumentUniqueId=AFRIXDRS
 
 [GeneratedDocument1]
-DocumentPath=Project Outputs for led-cube\led-cube.NET
+DocumentPath=Project Outputs for led-cube\Design Rule Check - led-cube.html
 DItemRevisionGUID=
 
 [Configuration1]
