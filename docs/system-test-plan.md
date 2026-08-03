@@ -2,7 +2,9 @@
 
 One test per specification in `system-specifications.md`. ST-nn verifies SPEC-nn.
 
-Equipment: multimeter, thermometer, calipers, a firmware debug mode that prints timing and counters over serial.
+Equipment: multimeter, thermometer, calipers, lux meter, protractor, a firmware debug mode that prints timing and counters over serial.
+
+ST-13 and ST-14 are measurements rather than datasheet readings, because the LEDs are bought in bulk without a published datasheet (ADR-18).
 
 | Test | How to test | Pass if | Result |
 |---|---|---|:--:|
@@ -16,10 +18,10 @@ Equipment: multimeter, thermometer, calipers, a firmware debug mode that prints 
 | ST-08 | Debug mode records the largest gap between consecutive frame periods over 60 s. | 250 µs or less. | |
 | ST-09 | Read the buffer-swap code and confirm the swap can only happen between frames. | No path exists that displays a half-written buffer. | |
 | ST-10 | In a dark room, after 2 minutes of letting your eyes adjust, light one LED and look at its unlit neighbours. | No glow visible on any unlit LED. | |
-| ST-11 | Debug mode prints the blanking interval in microseconds. | 5 µs or more. | |
+| ST-11 | Confirm the layer byte and the eight column bytes travel in one 72-bit word latched by a single RCLK edge. | Both change together; no code path updates one without the other. | |
 | ST-12 | Measure the voltage across every column resistor with all LEDs on, and divide by 220 Ω to get each current. | Highest and lowest within ±20 % of the average. | |
-| ST-13 | Measure one LED's current, read its intensity at that current from the datasheet, and multiply by 0.125 for the duty cycle. | 20 mcd or more. | |
-| ST-14 | Read the viewing angle at half intensity from the LED datasheet. | 60° or wider. | |
+| ST-13 | In a dark room, light one LED at the design current and measure illuminance on-axis at 0.5 m with a lux meter. Intensity in mcd = lux x 250. Multiply by 0.125 for the duty cycle. | 20 mcd or more. | |
+| ST-14 | Mount one lit LED at the centre of a protractor. Record on-axis illuminance, then swing the meter off-axis until the reading halves. Double that angle. | 60° or wider. | |
 | ST-15 | Measure the centre-to-centre spacing of 10 adjacent LED pairs in each axis with calipers. | Every reading 22.86 mm ±1 mm. | |
 | ST-16 | Hold a printed 22.86 mm grid against each face and find the worst-offset LED. | 1 mm or less. | |
 | ST-17 | Lay a straightedge along each outer row and column and measure the largest bow. | 1.5 mm or less. | |
@@ -39,13 +41,12 @@ Equipment: multimeter, thermometer, calipers, a firmware debug mode that prints 
 | ST-31 | Multimeter from every conductor you can touch to ground, cube running. | Nothing above 5 V. | |
 | ST-32 | Calipers from the lowest conductor under the board to the surface it stands on. | 5 mm or more. | |
 | ST-33 | Keep a running total of your build hours. | 20 h or less, not counting firmware. | |
-| ST-34 | Count the solder joints from the design: two per LED plus the board joints. | 1300 or fewer. | |
-| ST-35 | Flash new firmware and count how many things you had to take apart. | Zero. | |
-| ST-36 | Time a full flash from starting the upload to the cube running again. | 60 s or less. | |
-| ST-37 | Add one new animation, then run `git diff --stat`. | 2 files changed or fewer. | |
-| ST-38 | In that same diff, look at the lines changed outside the animation module. | Zero. | |
-| ST-39 | Thermometer on every surface you would normally touch, immediately after the 4 h run. | All 45 °C or below. | |
-| ST-40 | Thermometer in the room at the moment of that measurement. | Between 22 and 28 °C. | |
-| ST-41 | Calipers on the longest leads sticking out past their solder joints. | 1 mm or less. | |
-| ST-42 | Run a finger along every exposed edge and corner, then check the worst against a 0.5 mm reference. | Nothing sharper than 0.5 mm radius. | |
-| ST-43 | Add up the parts list at the prices you actually paid. | 100.00 EUR or less, excluding shipping, tools and the adapter. | |
+| ST-34 | Flash new firmware and count how many things you had to take apart. | Zero. | |
+| ST-35 | Time a full flash from starting the upload to the cube running again. | 60 s or less. | |
+| ST-36 | Add one new animation, then run `git diff --stat`. | 2 files changed or fewer. | |
+| ST-37 | In that same diff, look at the lines changed outside the animation module. | Zero. | |
+| ST-38 | Thermometer on every surface you would normally touch, immediately after the 4 h run. | All 45 °C or below. | |
+| ST-39 | Thermometer in the room at the moment of that measurement. | Between 22 and 28 °C. | |
+| ST-40 | Calipers on the longest leads sticking out past their solder joints. | 1 mm or less. | |
+| ST-41 | Run a finger along every exposed edge and corner, then check the worst against a 0.5 mm reference. | Nothing sharper than 0.5 mm radius. | |
+| ST-42 | Add up the parts list at the prices you actually paid. | 100.00 EUR or less, excluding shipping, tools and the adapter. | |

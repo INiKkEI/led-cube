@@ -6,6 +6,8 @@ Worst case throughout is every LED commanded on. Because one layer is lit at a t
 
 ## Operating point
 
+> **Provisional.** Every figure below assumes a forward voltage of 3.2 V. Datasheets for all candidate blue LEDs specify 3.2–4.0 V, so this is an assumption, not a fact. Measure Vf at 6 mA on ten delivered LEDs before ordering resistors — see ADR-05 and RISK-02. At Vf = 3.7 V the current falls to about 4.5 mA and every current and power figure here scales with it.
+
 LED current depends on which 74HCT595 variant is fitted, since the register's own output resistance is in series with the column resistor. The layer MOSFET contributes nothing measurable — at 3 mΩ it drops about 1 mV — so it is left out:
 
 ```
@@ -55,7 +57,7 @@ The resistors burning 554 mW is the price of setting current with a resistor rat
 | Component | Each | Rating | Used |
 |---|---|---|---|
 | 220 Ω column resistor | 8.7 mW | 250 mW (1/4 W) | 3.5 % |
-| 74HCT595 column register | 21.1 mW | DIP-16, ≈80 °C/W | +1.7 °C rise |
+| 74HCT595 column register | 21.1 mW | SOIC-16, ≈120 °C/W | +2.5 °C rise |
 | IRLB3813PBF layer MOSFET | 0.5 mW | 230 W | 0.0 % |
 
 Nothing is close to a limit. SPEC-23 caps components at 80 % of their rated maximum; the worst case here is 3.5 %.
@@ -77,7 +79,7 @@ Even the correct figure is 3.5 % of a quarter-watt part, so the error would not 
 
 Total dissipation inside the base is roughly 1.5 W once the LEDs' own 1.3 W is excluded — and the LEDs are spread across a 160 mm lattice in open air, so they contribute almost nothing to base temperature.
 
-The largest single source is the ESP32 module at 750 mW, most of it in the linear regulator dropping 5 V to 3.3 V. That is the part to check first against the 45 °C surface limit in SPEC-39.
+The largest single source is the ESP32 module at 750 mW, most of it in the linear regulator dropping 5 V to 3.3 V. That is the part to check first against the 45 °C surface limit in SPEC-38.
 
 The layer MOSFETs dissipate half a milliwatt between them. They will be at ambient, and their TO-220 tabs need no heatsinking whatever.
 

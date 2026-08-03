@@ -15,7 +15,7 @@ Equipment: multimeter, breadboard, a few spare LEDs and resistors, the firmware 
 | IT-03 | Add eight 220 Ω resistors and eight LEDs to that register's outputs, cathodes to ground. | Each LED lights when its bit is set. About 6.3 mA per LED, about 50 mA total into the register. | |
 | IT-04 | Put an N-channel MOSFET between the LEDs' common cathode and ground, gate driven from a spare pin. | LEDs light only when the gate is high. Less than 50 mV across the MOSFET while conducting. | |
 | IT-05 | Chain a second 595 from the first. Shift 16 bits containing a single 1 and note where it appears. | The bit lands on the predicted output. Record which register receives the first byte sent — firmware depends on it. | |
-| IT-06 | Drive OE high, then low, with data latched. | All outputs go inactive while OE is high, whatever is latched. | |
+| IT-06 | Load different patterns into two chained registers, then pulse LATCH once. | Both registers' outputs change on that single pulse — no intermediate state appears. | |
 | IT-07 | Run the timer interrupt shifting 72 bits and switching a dummy layer line. | Debug output reports 200 Hz or more, with jitter inside 250 µs. | |
 
 ## Stage 2 — Bare PCB, nothing fitted

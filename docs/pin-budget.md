@@ -9,10 +9,9 @@ Every connection the schematic needs: controller pins, shift register pins, chai
 | SCK | GPIO 18 | out | VSPI default clock |
 | MOSI | GPIO 23 | out | VSPI default data out |
 | LATCH | GPIO 21 | out | Common RCLK to all nine registers |
-| OE | GPIO 22 | out | Common blanking for the eight column registers only |
 | BTN | GPIO 27 | in | Momentary to ground, internal pull-up enabled |
 
-Five pins used. GPIO 1 and 3 stay with the USB-serial bridge for flashing and debug output.
+Four pins used. GPIO 1 and 3 stay with the USB-serial bridge for flashing and debug output.
 
 ### Why these pins
 
@@ -31,19 +30,19 @@ All nine share the same pin usage. U1–U8 drive the columns; U9 drives the laye
 | 14 | SER | Serial data in — from MOSI on U1, from the previous register's QH′ on U2–U9 |
 | 11 | SRCLK | Shift clock — common to all nine, from GPIO 18 |
 | 12 | RCLK | Latch — common to all nine, from GPIO 21 |
-| 13 | OE | U1–U8: common, from GPIO 22. **U9: tied to ground** |
+| 13 | OE | **Tied to ground on all nine.** Outputs permanently enabled, no blanking control |
 | 10 | SRCLR | Tied to +5 V on all nine (clear never used) |
 | 9 | QH′ | Serial out to the next register's SER. Unused on U9 |
 | 15 | QA | First output of that register's group |
 | 1–7 | QB–QH | Remaining seven outputs |
 
-There are no local decoupling capacitors at the registers — the design relies on a single 470 µF bulk capacitor at the power jack.
+There are no local decoupling capacitors at the registers — the design relies on a single 470 µF bulk capacitor at the power jack. The only other passives on signal pins are the 64 column resistors and a 10 kΩ pull-down on LATCH: 65 resistors in total.
 
-### Why U9's OE is grounded
+### Why every OE is grounded
 
-Blanking removes the column drive, and with no column current no LED can light regardless of layer state. So blanking only needs to reach U1–U8.
+Blanking is unnecessary because the layer byte rides in the same 72-bit word as the column bytes, so one latch edge updates both together — there is never an instant where new column data meets the old layer. Grounding OE also keeps the MOSFET gates permanently driven rather than floating.
 
-If OE also blanked U9, the MOSFET gates would go high-impedance during every blanking interval and hold charge unpredictably. Leaving U9 permanently enabled keeps the gates firmly driven at all times.
+The cost is a brief flash of random data at power-on, before firmware writes the first frame. See ADR-17.
 
 ## Column mapping
 

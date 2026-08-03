@@ -26,3 +26,17 @@ Project Outputs*/
 
 # Folder to save each comparison results
 CompareHistory/
+
+### Added 2026-08-03 ###
+
+# Power Analyzer by Keysight - solver meshes, logs and generated report (35 MB)
+PowerAnalyzerByKeysight_Output/
+
+# Accidental duplicate extension from a Save As
+*.pdnaK.pdnaK
+
+# Generated reports - the summary lives in docs/power-integrity.md
+led-cube.XLS
+led-cube.html
+led-cube.txt
+*.WAS

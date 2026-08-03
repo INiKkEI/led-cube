@@ -151,7 +151,7 @@ So direct drive at full current is not possible. Published 8×8×8 builds that d
 
 ## ADR-05 — 220 Ω column resistors
 
-**Status:** Accepted
+**Status:** Accepted — **provisional**, see amendment below
 
 ### Context
 
@@ -186,7 +186,19 @@ The layer MOSFET is in this loop too, but at 3 mΩ it drops about 1 mV and is le
 - Safe with any 74HCT595 variant, which was the point — the part can be chosen on price.
 - Roughly 20 % dimmer than 150 Ω would have been, on a design already marginal for brightness.
 - Operating range 5.9–6.7 mA peak, taken as 6.3 mA nominal: 0.78 mA average at 12.5 % duty, 401 mA per layer.
-- Never reduce this value. It is the only thing keeping the shift registers inside their rating.
+- Never reduce this value without redoing the package-current check. It is the only thing keeping the shift registers inside their rating.
+
+### Amendment 2026-08-03 — provisional pending measurement
+
+Every number above assumes Vf = 3.2 V. Datasheets for all candidate blue LEDs specify **3.2–4.0 V**, so 3.2 V is an assumption with no datasheet behind it. At Vf = 3.7 V the current falls to about 4.5 mA — 29 % below the design point.
+
+Before ordering resistors:
+
+1. Measure Vf at 6 mA on ten delivered LEDs.
+2. Recompute `R = (5.0 − Vf) / 0.0063 − 67 Ω`.
+3. If R falls below 180 Ω, recheck per-package current against the 74HCT595's 70 mA absolute maximum before committing.
+
+Until step 1 is done, 220 Ω is a baseline, not a decision.
 
 ---
 
@@ -281,7 +293,7 @@ Adding a register costs three shared SPI pins rather than eight dedicated GPIOs,
 ### Consequences
 
 - Layer and column data travel together, so a single 72-bit transfer updates everything.
-- Blanking must be timed carefully: the OE line has to disable outputs *before* new data latches, or the previous layer's pattern briefly appears on the new layer as ghosting (RISK-05).
+- Because the layer byte shares the 72-bit word with the column bytes, one latch edge updates both together. That removes the ghosting race blanking would otherwise guard against, and is why OE could later be grounded outright (ADR-17).
 - Six ESP32 pins freed compared with direct GPIO drive.
 
 ---
@@ -416,7 +428,7 @@ A silicon diode would have cost nearly half the brightness on a design already s
 
 ### Context
 
-Refresh rate, frame period, jitter, blanking interval and button latency all need verifying. There is no oscilloscope or logic analyser available.
+Refresh rate, frame period, jitter and button latency all need verifying. There is no oscilloscope or logic analyser available.
 
 ### Decision
 
@@ -437,11 +449,11 @@ A firmware debug mode counts interrupts and prints measured timing over the seri
 
 ### Context
 
-The design needs five ESP32 pins: SCK, MOSI, LATCH, OE and a button. The module exposes far more than five, but they are not interchangeable — several groups cannot be used at all, and the SPI peripheral has two different default pin sets.
+The design needs four ESP32 pins: SCK, MOSI, LATCH and a button. (OE was a fifth until ADR-17 grounded it.) The module exposes far more than five, but they are not interchangeable — several groups cannot be used at all, and the SPI peripheral has two different default pin sets.
 
 ### Decision
 
-VSPI defaults for the bus — SCK on GPIO 18, MOSI on GPIO 23 — with LATCH on GPIO 21, OE on GPIO 22 and the button on GPIO 27.
+VSPI defaults for the bus — SCK on GPIO 18, MOSI on GPIO 23 — with LATCH on GPIO 21 and the button on GPIO 27. GPIO 22 was reserved for OE and is now free.
 
 ### Reasoning
 
@@ -461,8 +473,7 @@ VSPI's defaults (GPIO 18 and 23) are ordinary pins. The remaining three signals 
 
 - Hardware SPI is used at its default pins, so no remapping is needed in firmware.
 - No signal touches a strapping pin, so nothing the cube does can prevent the board from starting.
-- OE needs an external pull-up rather than a firmware default, because the pin is high-impedance until firmware runs — recorded in IF-2.
-- Five pins used of roughly a dozen unrestricted ones. Ample room for a second button or a status LED later.
+- Four pins used of roughly a dozen unrestricted ones, plus GPIO 22 freed by ADR-17. Ample room for a second button or a status LED later.
 
 ---
 
@@ -517,4 +528,153 @@ A 470 Ω resistor would have brought that to 9 mA at the cost of a 10 µs switch
 
 The overstress is brief — 0.76 µs time constant, so about 2 µs per switch, 1600 times a second, roughly 0.4 % of the time. Carried as RISK-09.
 
-The pull-down matters less. U9's OE is grounded, so its outputs are always actively driven and never float; only the instant of power-up is uncovered.
+The pull-down matters less. Every OE is grounded, so all register outputs are always actively driven and never float; only the instant of power-up is uncovered.
+
+---
+
+## ADR-17 — All OE pins grounded, no blanking
+
+**Status:** Accepted. Supersedes the blanking arrangement in ADR-08 and frees a pin from ADR-15.
+
+### Context
+
+The 74HCT595's output-enable pin disables all eight outputs when held high. The original design drove OE from GPIO 22 to blank the display while the layer changed, with a pull-up holding it blank from power-on until firmware took over.
+
+### Decision
+
+Tie OE to ground on all nine registers. Outputs are permanently enabled. There is no blanking control.
+
+### Reasoning
+
+Blanking existed to prevent ghosting — stale column data lit on a newly selected layer. That race cannot occur here, because the layer byte travels in the same 72-bit word as the eight column bytes and is latched by the same RCLK edge. Columns and layer change simultaneously, so there is no interval where one is new and the other old.
+
+What remains is MOSFET switching overlap. At the latch edge the outgoing layer's switch turns off over roughly 2 µs while the incoming one turns on, and during that sliver the new pattern sits on the old layer:
+
+```
+2 µs of overlap / 625 µs layer period ≈ 0.3 %
+```
+
+Below the 1 % off-state limit in SPEC-10, and almost certainly invisible.
+
+### Consequences
+
+- **A flash of random data at every power-on.** The registers come up holding undefined bits and drive them straight to the LEDs. The OE pull-up was what prevented this, and it cannot be replaced in firmware — firmware is not running yet. Cosmetic, but permanent.
+- SPEC-11 no longer measures a blanking interval; it now requires that column data and layer select become valid on the same latch edge, which is what actually protects against ghosting.
+- IT-06 changed from testing OE to testing that one latch pulse updates both chained registers together.
+- GPIO 22 freed, and the 10 kΩ OE pull-up removed — 65 resistors rather than 66.
+- Firmware must never update the layer byte separately from the column bytes. Doing so would reintroduce exactly the race blanking was guarding against.
+- If ghosting does appear, blanking can be done in software by latching all-zero column bytes before the real frame. Costs a second 72-bit transfer per layer, 36 µs of 625. It would not fix the power-on flash.
+
+---
+
+## ADR-18 — Bulk unbranded LEDs, chosen on cost
+
+**Status:** Accepted 2026-08-03. Amends ADR-01.
+
+### Context
+
+ADR-01 fixed the LED type — 5 mm blue, diffused lens. It did not fix a part. Pricing the catalogue options against SPEC-42's 100 EUR cap made the choice for us.
+
+### Options considered
+
+| Part | Lens | Angle | Iv @ 20 mA | 512 pieces |
+|---|---|---|---|---|
+| VCC VAOL-5LSBY2 | Diffused | 60° | 1500 mcd | ≈ 180 EUR |
+| Cree C503B-BCN | Water clear | 30° | 2130 mcd | ≈ 200 EUR |
+| Kingbright WP7113QBC/D | Water clear | 20° | 3100 mcd | ≈ 180 EUR |
+| **Bulk frosted, AliExpress** | **Frosted** | **not stated** | **not stated** | **≈ 13 EUR** |
+
+The two clear-lens parts fail SPEC-14 outright. The VCC part meets every optical specification and costs 1.8× the entire budget on its own.
+
+### Decision
+
+Buy bulk frosted 5 mm blue LEDs without a published datasheet. Order 1000, use the best 512.
+
+### Reasoning
+
+SPEC-42 is a **must**; SPEC-13 and SPEC-14 are quantities that a bulk part can still meet, just not provably in advance. The catalogue route would have broken a must-requirement to satisfy two that can be verified by measurement instead.
+
+### Consequences
+
+- ST-13 and ST-14 change from datasheet readings to physical measurements.
+- No intensity or Vf binning is guaranteed, which puts pressure on SPEC-12 — see RISK-11.
+- Vf is unknown until measured, which is why ADR-05 is provisional.
+- The BOM line carries a supplier part number but no manufacturer part number, so it is not reproducible from a distributor.
+- Ordering 1000 rather than 512 costs about 6 EUR and provides spares and destructive test samples.
+
+---
+
+## ADR-19 — Two-layer 1.6 mm board, 180 × 230 mm
+
+**Status:** Accepted 2026-08-03
+
+### Context
+
+The board carries the whole lattice and is the only structural member. Nothing in the documents stated its size or construction.
+
+### Decision
+
+Two copper layers, 1 oz (35 µm), FR-4, 1.6 mm finished thickness. Outline 7100 × 9075 mil — **180.3 × 230.5 mm**. Top layer poured as +5, bottom poured as GND, both held 20 mil back from the routed edge.
+
+### Reasoning
+
+The 8 × 8 field at 900 mil pitch spans 6300 mil, and the register chain, resistor banks and MOSFETs occupy the margins. Two layers suffice because the +5 net needs no routing at all — the top pour is the entire distribution network (see `power-integrity.md`).
+
+1.6 mm is JLC's default and the only thickness that makes a 230 mm unsupported span rigid enough to hold the lattice.
+
+### Consequences
+
+- At 414 cm² this is far past JLC's promotional board size; the PCB is likely the largest single line item in the BOM.
+- Four corner supports across 230 mm will still allow the centre to bow. Measured at ST-29.
+- 1 oz copper sets the sheet resistance used in the power integrity analysis.
+
+---
+
+## ADR-20 — Four SMD spacers as feet
+
+**Status:** Accepted 2026-08-03
+
+### Context
+
+SPEC-31 requires 5 mm from the lowest conductor to the surface the cube stands on. The board had no mounting provision.
+
+### Decision
+
+Four Würth 9771090360R SMD steel spacers, M3 external thread, 9 mm body, soldered to the **bottom** layer at the four corners.
+
+### Options considered
+
+Through-hole M3 clearance holes were considered first and rejected: at 3.2 mm plus a 6 mm body they collide with the COL7 pad at the top-right corner, and the side margins are fully routed with no room for mid-board supports.
+
+### Consequences
+
+- 9 mm gives SPEC-31 nearly double its 5 mm minimum.
+- The corners are not symmetric — the top-right sits 200 mil lower than the top-left to clear COL7's pad.
+- The exposed M3 thread needs a nut or rubber foot; the cube must not stand on a bare thread tip.
+- Only four supports are possible, so board bow is unmitigated by design.
+- These are PCB-only components with no schematic counterpart. Every ECO will offer to delete them — untick those lines.
+
+---
+
+## ADR-21 — Thermal relief kept on high-current pads
+
+**Status:** Accepted 2026-08-03
+
+### Context
+
+Both pours connect to pads through thermal relief spokes rather than pouring solid. The DC power integrity analysis flags these as the highest current density on the board.
+
+### Decision
+
+Keep thermal relief. Do not switch the jack or MOSFET source pads to direct connect.
+
+### Reasoning
+
+Simulated worst-case current density is 10.9 A/mm² against a 20 A/mm² limit — 55 % margin. The spokes are under a millimetre long, so the heating is negligible.
+
+Direct connect would sink the pad into a full copper plane, and every one of these parts is hand-soldered: a barrel jack, eight TO-220 tabs and 72 matrix wires. Solderability is the binding constraint, not current.
+
+### Consequences
+
+- The reliefs remain the board's current-density hot spots, at 55 % margin.
+- Revisit only if LED current is ever raised well above 6.3 mA.
