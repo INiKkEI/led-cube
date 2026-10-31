@@ -50,6 +50,16 @@ flowchart LR
 - [ ] Firmware: refresh loop, button handling, five animations
 - [ ] Run the system and acceptance tests
 
+## What I learned
+
+This was my first board designed in Altium.
+
+- A 74HCT595 output is rated for 35 mA, but the whole package is limited to 70 mA, so I couldn't drive eight LEDs at 20 mA each. That set the 220 Ω column resistors and about 6 mA per LED. The larger resistor also evens out brightness, because it outweighs the chip-to-chip spread in output resistance.
+- The layer MOSFETs are switched from 5 V logic, so I picked them by R_DS(on) at V_GS = 4.5 V. One part I rejected looked great at 10 V but could need up to 4 V just to start conducting.
+- I assumed a 3.2 V forward voltage for the LEDs, then found that datasheets give 3.2–4.0 V. The resistor value stays provisional until I measure real LEDs. I also raised the refresh rate from 60 Hz to 200 Hz once I worked out how short 12.5 % duty pulses flicker in peripheral vision.
+- A series diode against reverse polarity would have cut LED current by up to 46 %. I left it out and wrote down why in the decision records and risk register.
+- The Altium power analysis gave 2.8 W and a 9.4 mV drop, close to my hand-calculated budget of 2.76 W.
+
 ## Documentation
 
 | Document | What's in it |
