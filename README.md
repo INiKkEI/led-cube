@@ -6,6 +6,10 @@ A 512-LED cube driven by an ESP32, designed from requirements to PCB as a person
 
 ![3D render of the PCB in Altium](docs/img/pcb-3d.png)
 
+| Schematic | PCB layout (top) |
+|---|---|
+| [![Schematic](docs/img/schematic.png)](docs/img/schematic.png) | [![PCB layout, top side](docs/img/pcb-2d.png)](docs/img/pcb-2d.png) |
+
 ## How it works
 
 One horizontal layer of 64 LEDs is lit at a time. The ESP32 shifts 72 bits into a chain of nine 74HCT595 shift registers over SPI: 64 bits for the columns and 8 for the layer select. A single latch edge updates both together, so new column data never appears on the old layer. Eight layers make one frame, refreshed 200 times a second.
