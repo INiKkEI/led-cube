@@ -8,7 +8,7 @@ A 512-LED cube driven by an ESP32, designed from requirements to PCB as a person
 
 | Schematic | PCB layout (top) |
 |---|---|
-| [![Schematic](docs/img/schematic.png)](docs/img/schematic.png) | [![PCB layout, top side](docs/img/pcb-2d.png)](docs/img/pcb-2d.png) |
+| [![Schematic](docs/img/schematic_1.png)](docs/img/schematic_1.png) | [![PCB layout, top side](docs/img/pcb-2d_1.png)](docs/img/pcb-2d_1.png) |
 
 ## How it works
 
