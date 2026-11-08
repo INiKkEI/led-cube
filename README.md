@@ -2,7 +2,7 @@
 
 A 512-LED cube driven by an ESP32, designed from requirements to PCB as a personal project. Everything is documented the way a real product would be: requirements, measurable specifications, architecture, design decisions, risks and test plans.
 
-**Status: design phase.** Schematic and PCB layout are done in Altium. The board has not been ordered or built yet, and the firmware has not been started.
+**Status: PCB ordered.** Schematic and PCB layout are done in Altium, and the first prototype board was ordered in November 2026. The board has not been built yet, and the firmware has not been started.
 
 ![3D render of the PCB in Altium](docs/img/pcb-3d.png)
 
@@ -49,7 +49,7 @@ flowchart LR
 - [x] Integration, system and acceptance test plans
 - [ ] Measure LED forward voltage and confirm the column resistor value
 - [ ] Breadboard test: one shift register, one MOSFET, eight LEDs
-- [ ] Order PCB
+- [x] Order PCB
 - [ ] Build the lattice and assemble
 - [ ] Firmware: refresh loop, button handling, five animations
 - [ ] Run the system and acceptance tests
