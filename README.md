@@ -39,7 +39,7 @@ flowchart LR
 
 ## Progress
 
-- [x] User requirements (22) and measurable specifications (34)
+- [x] User requirements (22) and measurable specifications (42)
 - [x] System architecture and interface definitions
 - [x] 21 design decision records (ADRs)
 - [x] Power budget and pin budget
